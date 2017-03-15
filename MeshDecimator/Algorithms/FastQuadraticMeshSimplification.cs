@@ -591,7 +591,7 @@ namespace MeshDecimator.Algorithms
             }
 
             // Write References
-            this.refs.Resize(tstart); // TODO: Original code has triangleCount*3
+            this.refs.Resize(tstart);
             var refs = this.refs.Data;
             for (int i = 0; i < triangleCount; i++)
             {
