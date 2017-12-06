@@ -551,19 +551,20 @@ namespace MeshDecimator.Unity
             var meshBoneWeights = mesh.boneWeights;
             var meshBindposes = mesh.bindposes;
 
+            int totalTriangleCount = 0;
             var meshIndices = new int[subMeshCount][];
             for (int i = 0; i < subMeshCount; i++)
             {
                 meshIndices[i] = mesh.GetTriangles(i);
+                totalTriangleCount += meshIndices[i].Length / 3;
             }
 
             // Transforms the vertices
             TransformVertices(meshVertices, ref transform);
 
             var vertices = ToSimplifyVertices(meshVertices);
-            int currentTriangleCount = meshIndices.Length / 3;
             quality = UMath.Clamp01(quality);
-            int targetTriangleCount = UMath.CeilToInt(currentTriangleCount * quality);
+            int targetTriangleCount = UMath.CeilToInt(totalTriangleCount * quality);
             var sourceMesh = new Mesh(vertices, meshIndices);
 
             if (meshNormals != null && meshNormals.Length > 0)
