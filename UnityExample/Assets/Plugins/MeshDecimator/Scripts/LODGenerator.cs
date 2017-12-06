@@ -424,7 +424,7 @@ namespace MeshDecimator.Unity
                 throw new System.ArgumentNullException("gameObj");
 
             var targetTransform = gameObj.transform;
-            var lodsParent = targetTransform.FindChild(ParentGameObjectName);
+            var lodsParent = targetTransform.Find(ParentGameObjectName);
             if (lodsParent != null)
             {
                 if (Application.isPlaying)
