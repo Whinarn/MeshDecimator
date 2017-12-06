@@ -373,11 +373,6 @@ namespace MeshDecimator.Algorithms
             {
                 vertColors[i0] = (vertColors[i0] + vertColors[i1]) * 0.5f;
             }
-            if (vertBoneWeights != null)
-            {
-                var vertBoneWeights = this.vertBoneWeights.Data;
-                BoneWeight.Merge(ref vertBoneWeights[i0], ref vertBoneWeights[i1]);
-            }
         }
         #endregion
 
