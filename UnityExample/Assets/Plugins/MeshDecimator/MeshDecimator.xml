@@ -1,0 +1,1884 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MeshDecimator</name>
+    </assembly>
+    <members>
+        <member name="T:MeshDecimator.Algorithms.FastQuadraticMeshSimplification">
+            <summary>
+            The fast quadratic mesh simplification algorithm.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Agressiveness">
+            <summary>
+            Gets or sets the agressiveness of this algorithm. Higher number equals higher quality, but more expensive to run.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.#ctor">
+            <summary>
+            Creates a new fast quadratic mesh simplification algorithm.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Flipped(MeshDecimator.Math.Vector3d,System.Int32,System.Int32,MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean})">
+            <summary>
+            Check if a triangle flips when this edge is removed
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.UpdateTriangles(System.Int32,MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
+            <summary>
+            Update triangle connections and edge error after a edge is collapsed.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.RemoveVertexPass(System.Int32,System.Int32,System.Double,MeshDecimator.Collections.ResizableArray{System.Boolean},MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
+            <summary>
+            Remove vertices and mark deleted triangles
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.UpdateMesh(System.Int32)">
+            <summary>
+            Compact triangles, compute edge error and build reference list.
+            </summary>
+            <param name="iteration">The iteration index.</param>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.CompactMesh">
+            <summary>
+            Finally compact mesh before exiting.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Initialize(MeshDecimator.Mesh)">
+            <summary>
+            Initializes the algorithm with the original mesh.
+            </summary>
+            <param name="mesh">The mesh.</param>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.DecimateMesh(System.Int32)">
+            <summary>
+            Decimates the mesh.
+            </summary>
+            <param name="targetTrisCount">The target triangle count.</param>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.DecimateMeshLossless">
+            <summary>
+            Decimates the mesh without losing any quality.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.ToMesh">
+            <summary>
+            Returns the resulting mesh.
+            </summary>
+            <returns>The resulting mesh.</returns>
+        </member>
+        <member name="T:MeshDecimator.Algorithms.DecimationAlgorithm">
+            <summary>
+            A decimation algorithm.
+            </summary>
+        </member>
+        <member name="T:MeshDecimator.Algorithms.DecimationAlgorithm.StatusReportCallback">
+            <summary>
+            A callback for decimation status reports.
+            </summary>
+            <param name="iteration">The current iteration, starting at zero.</param>
+            <param name="originalTris">The original count of triangles.</param>
+            <param name="currentTris">The current count of triangles.</param>
+            <param name="targetTris">The target count of triangles.</param>
+        </member>
+        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.keepBorders">
+            <summary>
+            If borders should be kept.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.keepLinkedVertices">
+            <summary>
+            If linked vertices should be kept.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.maxVertexCount">
+            <summary>
+            The maximum vertex count, if any. Zero means no limitation is imposed.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.verbose">
+            <summary>
+            If verbose information should be printed in the console.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.KeepBorders">
+            <summary>
+            Gets or sets if borders should be kept.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.KeepLinkedVertices">
+            <summary>
+            Gets or sets if linked vertices should be kept.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.MaxVertexCount">
+            <summary>
+            Gets or sets the maximum vertex count. Set to zero for no limitation.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.Verbose">
+            <summary>
+            Gets or sets if verbose information should be printed in the console.
+            </summary>
+        </member>
+        <member name="E:MeshDecimator.Algorithms.DecimationAlgorithm.StatusReport">
+            <summary>
+            An event for status reports for this algorithm.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.DecimationAlgorithm.ReportStatus(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Reports the current status of the decimation.
+            </summary>
+            <param name="iteration">The current iteration, starting at zero.</param>
+            <param name="originalTris">The original count of triangles.</param>
+            <param name="currentTris">The current count of triangles.</param>
+            <param name="targetTris">The target count of triangles.</param>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.DecimationAlgorithm.Initialize(MeshDecimator.Mesh)">
+            <summary>
+            Initializes the algorithm with the original mesh.
+            </summary>
+            <param name="mesh">The mesh.</param>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.DecimationAlgorithm.DecimateMesh(System.Int32)">
+            <summary>
+            Decimates the mesh.
+            </summary>
+            <param name="targetTrisCount">The target triangle count.</param>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.DecimationAlgorithm.DecimateMeshLossless">
+            <summary>
+            Decimates the mesh without losing any quality.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Algorithms.DecimationAlgorithm.ToMesh">
+            <summary>
+            Returns the resulting mesh.
+            </summary>
+            <returns>The resulting mesh.</returns>
+        </member>
+        <member name="T:MeshDecimator.Collections.ResizableArray`1">
+            <summary>
+            A resizable array.
+            </summary>
+            <typeparam name="T">The item type.</typeparam>
+        </member>
+        <member name="P:MeshDecimator.Collections.ResizableArray`1.Length">
+            <summary>
+            Gets the length of this array.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Collections.ResizableArray`1.Data">
+            <summary>
+            Gets the internal data buffer for this array.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Collections.ResizableArray`1.Item(System.Int32)">
+            <summary>
+            Gets or sets the element value at a specific index.
+            </summary>
+            <param name="index">The element index.</param>
+            <returns>The element value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.#ctor">
+            <summary>
+            Creates a new resizable array.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.#ctor(System.Int32)">
+            <summary>
+            Creates a new resizable array.
+            </summary>
+            <param name="capacity">The initial array capacity.</param>
+        </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.Clear">
+            <summary>
+            Clears this array.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.Resize(System.Int32)">
+            <summary>
+            Resizes this array.
+            </summary>
+            <param name="capacity">The new capacity.</param>
+        </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.TrimExcess">
+            <summary>
+            Trims any excess memory for this array.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.Add(`0)">
+            <summary>
+            Adds a new item to the end of this array.
+            </summary>
+            <param name="item">The new item.</param>
+        </member>
+        <member name="T:MeshDecimator.BoneWeight">
+            <summary>
+            A bone weight.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneIndex0">
+            <summary>
+            The first bone index.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneIndex1">
+            <summary>
+            The second bone index.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneIndex2">
+            <summary>
+            The third bone index.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneIndex3">
+            <summary>
+            The fourth bone index.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneWeight0">
+            <summary>
+            The first bone weight.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneWeight1">
+            <summary>
+            The second bone weight.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneWeight2">
+            <summary>
+            The third bone weight.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.BoneWeight.boneWeight3">
+            <summary>
+            The fourth bone weight.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a new bone weight.
+            </summary>
+            <param name="boneIndex0">The first bone index.</param>
+            <param name="boneIndex1">The second bone index.</param>
+            <param name="boneIndex2">The third bone index.</param>
+            <param name="boneIndex3">The fourth bone index.</param>
+            <param name="boneWeight0">The first bone weight.</param>
+            <param name="boneWeight1">The second bone weight.</param>
+            <param name="boneWeight2">The third bone weight.</param>
+            <param name="boneWeight3">The fourth bone weight.</param>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.op_Equality(MeshDecimator.BoneWeight,MeshDecimator.BoneWeight)">
+            <summary>
+            Returns if two bone weights equals eachother.
+            </summary>
+            <param name="lhs">The left hand side bone weight.</param>
+            <param name="rhs">The right hand side bone weight.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.op_Inequality(MeshDecimator.BoneWeight,MeshDecimator.BoneWeight)">
+            <summary>
+            Returns if two bone weights don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side bone weight.</param>
+            <param name="rhs">The right hand side bone weight.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.Equals(System.Object)">
+            <summary>
+            Returns if this bone weight is equal to another object.
+            </summary>
+            <param name="obj">The other object to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.Equals(MeshDecimator.BoneWeight)">
+            <summary>
+            Returns if this bone weight is equal to another one.
+            </summary>
+            <param name="other">The other bone weight to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.ToString">
+            <summary>
+            Returns a nicely formatted string for this bone weight.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.BoneWeight.Merge(MeshDecimator.BoneWeight@,MeshDecimator.BoneWeight@)">
+            <summary>
+            Merges two bone weights and stores the merged result in the first parameter.
+            </summary>
+            <param name="a">The first bone weight, also stores result.</param>
+            <param name="b">The second bone weight.</param>
+        </member>
+        <member name="T:MeshDecimator.Loggers.ConsoleLogger">
+            <summary>
+            The default console logger.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Loggers.ConsoleLogger.LogVerbose(System.String)">
+            <summary>
+            Logs a line of verbose text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.Loggers.ConsoleLogger.LogWarning(System.String)">
+            <summary>
+            Logs a line of warning text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.Loggers.ConsoleLogger.LogError(System.String)">
+            <summary>
+            Logs a line of error text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="T:MeshDecimator.ILogger">
+            <summary>
+            A logger.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.ILogger.LogVerbose(System.String)">
+            <summary>
+            Logs a line of verbose text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.ILogger.LogWarning(System.String)">
+            <summary>
+            Logs a line of warning text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.ILogger.LogError(System.String)">
+            <summary>
+            Logs a line of error text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="T:MeshDecimator.Logging">
+            <summary>
+            The logging API.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Logging.Logger">
+            <summary>
+            Gets or sets the active logger.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Logging.#cctor">
+            <summary>
+            The static initializer.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Logging.LogVerbose(System.String)">
+            <summary>
+            Logs a line of verbose text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.Logging.LogVerbose(System.String,System.Object[])">
+            <summary>
+            Logs a line of formatted verbose text.
+            </summary>
+            <param name="format">The string format.</param>
+            <param name="args">The string arguments.</param>
+        </member>
+        <member name="M:MeshDecimator.Logging.LogWarning(System.String)">
+            <summary>
+            Logs a line of warning text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.Logging.LogWarning(System.String,System.Object[])">
+            <summary>
+            Logs a line of formatted warning text.
+            </summary>
+            <param name="format">The string format.</param>
+            <param name="args">The string arguments.</param>
+        </member>
+        <member name="M:MeshDecimator.Logging.LogError(System.String)">
+            <summary>
+            Logs a line of error text.
+            </summary>
+            <param name="text">The text.</param>
+        </member>
+        <member name="M:MeshDecimator.Logging.LogError(System.String,System.Object[])">
+            <summary>
+            Logs a line of formatted error text.
+            </summary>
+            <param name="format">The string format.</param>
+            <param name="args">The string arguments.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.MathHelper">
+            <summary>
+            Math helpers.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.MathHelper.PI">
+            <summary>
+            The Pi constant.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.MathHelper.PId">
+            <summary>
+            The Pi constant.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.MathHelper.Deg2Rad">
+            <summary>
+            Degrees to radian constant.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.MathHelper.Deg2Radd">
+            <summary>
+            Degrees to radian constant.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.MathHelper.Rad2Deg">
+            <summary>
+            Radians to degrees constant.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.MathHelper.Rad2Degd">
+            <summary>
+            Radians to degrees constant.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Min(System.Int32,System.Int32)">
+            <summary>
+            Returns the minimum of two values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <returns>The minimum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Min(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns the minimum of three values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <param name="val3">The third value.</param>
+            <returns>The minimum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Min(System.Single,System.Single)">
+            <summary>
+            Returns the minimum of two values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <returns>The minimum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Min(System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the minimum of three values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <param name="val3">The third value.</param>
+            <returns>The minimum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Min(System.Double,System.Double)">
+            <summary>
+            Returns the minimum of two values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <returns>The minimum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Min(System.Double,System.Double,System.Double)">
+            <summary>
+            Returns the minimum of three values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <param name="val3">The third value.</param>
+            <returns>The minimum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Max(System.Int32,System.Int32)">
+            <summary>
+            Returns the maximum of two values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <returns>The maximum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Max(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns the maximum of three values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <param name="val3">The third value.</param>
+            <returns>The maximum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Max(System.Single,System.Single)">
+            <summary>
+            Returns the maximum of two values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <returns>The maximum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Max(System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the maximum of three values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <param name="val3">The third value.</param>
+            <returns>The maximum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Max(System.Double,System.Double)">
+            <summary>
+            Returns the maximum of two values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <returns>The maximum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Max(System.Double,System.Double,System.Double)">
+            <summary>
+            Returns the maximum of three values.
+            </summary>
+            <param name="val1">The first value.</param>
+            <param name="val2">The second value.</param>
+            <param name="val3">The third value.</param>
+            <returns>The maximum value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Clamp(System.Single,System.Single,System.Single)">
+            <summary>
+            Clamps a value between a minimum and a maximum value.
+            </summary>
+            <param name="value">The value to clamp.</param>
+            <param name="min">The minimum value.</param>
+            <param name="max">The maximum value.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Clamp(System.Double,System.Double,System.Double)">
+            <summary>
+            Clamps a value between a minimum and a maximum value.
+            </summary>
+            <param name="value">The value to clamp.</param>
+            <param name="min">The minimum value.</param>
+            <param name="max">The maximum value.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Clamp01(System.Single)">
+            <summary>
+            Clamps the value between 0 and 1.
+            </summary>
+            <param name="value">The value to clamp.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.Clamp01(System.Double)">
+            <summary>
+            Clamps the value between 0 and 1.
+            </summary>
+            <param name="value">The value to clamp.</param>
+            <returns>The clamped value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.TriangleArea(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Calculates the area of a triangle.
+            </summary>
+            <param name="p0">The first point.</param>
+            <param name="p1">The second point.</param>
+            <param name="p2">The third point.</param>
+            <returns>The triangle area.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.MathHelper.TriangleArea(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Calculates the area of a triangle.
+            </summary>
+            <param name="p0">The first point.</param>
+            <param name="p1">The second point.</param>
+            <param name="p2">The third point.</param>
+            <returns>The triangle area.</returns>
+        </member>
+        <member name="T:MeshDecimator.Math.SymmetricMatrix">
+            <summary>
+            A symmetric matrix.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m0">
+            <summary>
+            The m11 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m1">
+            <summary>
+            The m12 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m2">
+            <summary>
+            The m13 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m3">
+            <summary>
+            The m14 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m4">
+            <summary>
+            The m22 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m5">
+            <summary>
+            The m23 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m6">
+            <summary>
+            The m24 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m7">
+            <summary>
+            The m33 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m8">
+            <summary>
+            The m34 component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.SymmetricMatrix.m9">
+            <summary>
+            The m44 component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.SymmetricMatrix.Item(System.Int32)">
+            <summary>
+            Gets the component value with a specific index.
+            </summary>
+            <param name="index">The component index.</param>
+            <returns>The value.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.#ctor(System.Double)">
+            <summary>
+            Creates a symmetric matrix with a value in each component.
+            </summary>
+            <param name="c">The component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a symmetric matrix.
+            </summary>
+            <param name="m0">The m11 component.</param>
+            <param name="m1">The m12 component.</param>
+            <param name="m2">The m13 component.</param>
+            <param name="m3">The m14 component.</param>
+            <param name="m4">The m22 component.</param>
+            <param name="m5">The m23 component.</param>
+            <param name="m6">The m24 component.</param>
+            <param name="m7">The m33 component.</param>
+            <param name="m8">The m34 component.</param>
+            <param name="m9">The m44 component.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a symmetric matrix from a plane.
+            </summary>
+            <param name="a">The plane x-component.</param>
+            <param name="b">The plane y-component</param>
+            <param name="c">The plane z-component</param>
+            <param name="d">The plane w-component</param>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.op_Addition(MeshDecimator.Math.SymmetricMatrix,MeshDecimator.Math.SymmetricMatrix)">
+            <summary>
+            Adds two matrixes together.
+            </summary>
+            <param name="a">The left hand side.</param>
+            <param name="b">The right hand side.</param>
+            <returns>The resulting matrix.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.Determinant1">
+            <summary>
+            Determinant(0, 1, 2, 1, 4, 5, 2, 5, 7)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.Determinant2">
+            <summary>
+            Determinant(1, 2, 3, 4, 5, 6, 5, 7, 8)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.Determinant3">
+            <summary>
+            Determinant(0, 2, 3, 1, 5, 6, 2, 7, 8)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.Determinant4">
+            <summary>
+            Determinant(0, 1, 3, 1, 4, 6, 2, 5, 8)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MeshDecimator.Math.SymmetricMatrix.Determinant(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Computes the determinant of this matrix.
+            </summary>
+            <param name="a11">The a11 index.</param>
+            <param name="a12">The a12 index.</param>
+            <param name="a13">The a13 index.</param>
+            <param name="a21">The a21 index.</param>
+            <param name="a22">The a22 index.</param>
+            <param name="a23">The a23 index.</param>
+            <param name="a31">The a31 index.</param>
+            <param name="a32">The a32 index.</param>
+            <param name="a33">The a33 index.</param>
+            <returns>The determinant value.</returns>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector2">
+            <summary>
+            A single precision 2D vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2.Epsilon">
+            <summary>
+            The vector epsilon.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2.Normalized">
+            <summary>
+            Gets a normalized vector from this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.#ctor(System.Single)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.#ctor(System.Single,System.Single)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Addition(MeshDecimator.Math.Vector2,MeshDecimator.Math.Vector2)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Subtraction(MeshDecimator.Math.Vector2,MeshDecimator.Math.Vector2)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Multiply(MeshDecimator.Math.Vector2,System.Single)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Multiply(System.Single,MeshDecimator.Math.Vector2)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling vlaue.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Division(MeshDecimator.Math.Vector2,System.Single)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_UnaryNegation(MeshDecimator.Math.Vector2)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Equality(MeshDecimator.Math.Vector2,MeshDecimator.Math.Vector2)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Inequality(MeshDecimator.Math.Vector2,MeshDecimator.Math.Vector2)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Set(System.Single,System.Single)">
+            <summary>
+            Set x and y components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Scale(MeshDecimator.Math.Vector2@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Normalize">
+            <summary>
+            Normalizes this vector.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Clamp(System.Single,System.Single)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Equals(MeshDecimator.Math.Vector2)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The float format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Dot(MeshDecimator.Math.Vector2@,MeshDecimator.Math.Vector2@)">
+            <summary>
+            Dot Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Lerp(MeshDecimator.Math.Vector2@,MeshDecimator.Math.Vector2@,System.Single,MeshDecimator.Math.Vector2@)">
+            <summary>
+            Performs a linear interpolation between two vectors.
+            </summary>
+            <param name="a">The vector to interpolate from.</param>
+            <param name="b">The vector to interpolate to.</param>
+            <param name="t">The time fraction.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Scale(MeshDecimator.Math.Vector2@,MeshDecimator.Math.Vector2@,MeshDecimator.Math.Vector2@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.Normalize(MeshDecimator.Math.Vector2@,MeshDecimator.Math.Vector2@)">
+            <summary>
+            Normalizes a vector.
+            </summary>
+            <param name="value">The vector to normalize.</param>
+            <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector3">
+            <summary>
+            A single precision 3D vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3.Epsilon">
+            <summary>
+            The vector epsilon.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3.z">
+            <summary>
+            The z component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3.Normalized">
+            <summary>
+            Gets a normalized vector from this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.#ctor(System.Single)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.#ctor(MeshDecimator.Math.Vector3d)">
+            <summary>
+            Creates a new vector from a double precision vector.
+            </summary>
+            <param name="vector">The double precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Addition(MeshDecimator.Math.Vector3,MeshDecimator.Math.Vector3)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Subtraction(MeshDecimator.Math.Vector3,MeshDecimator.Math.Vector3)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Multiply(MeshDecimator.Math.Vector3,System.Single)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Multiply(System.Single,MeshDecimator.Math.Vector3)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling vlaue.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Division(MeshDecimator.Math.Vector3,System.Single)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_UnaryNegation(MeshDecimator.Math.Vector3)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Equality(MeshDecimator.Math.Vector3,MeshDecimator.Math.Vector3)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Inequality(MeshDecimator.Math.Vector3,MeshDecimator.Math.Vector3)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Explicit(MeshDecimator.Math.Vector3d)~MeshDecimator.Math.Vector3">
+            <summary>
+            Explicitly converts from a double-precision vector into a single-precision vector.
+            </summary>
+            <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Set(System.Single,System.Single,System.Single)">
+            <summary>
+            Set x, y and z components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Scale(MeshDecimator.Math.Vector3@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Normalize">
+            <summary>
+            Normalizes this vector.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Clamp(System.Single,System.Single)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Equals(MeshDecimator.Math.Vector3)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The float format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Dot(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Dot Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Cross(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Cross Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Angle(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Calculates the angle between two vectors.
+            </summary>
+            <param name="from">The from vector.</param>
+            <param name="to">The to vector.</param>
+            <returns>The angle.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Lerp(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@,System.Single,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Performs a linear interpolation between two vectors.
+            </summary>
+            <param name="a">The vector to interpolate from.</param>
+            <param name="b">The vector to interpolate to.</param>
+            <param name="t">The time fraction.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Scale(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.Normalize(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Normalizes a vector.
+            </summary>
+            <param name="value">The vector to normalize.</param>
+            <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.OrthoNormalize(MeshDecimator.Math.Vector3@,MeshDecimator.Math.Vector3@)">
+            <summary>
+            Normalizes both vectors and makes them orthogonal to each other.
+            </summary>
+            <param name="normal">The normal vector.</param>
+            <param name="tangent">The tangent.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector3d">
+            <summary>
+            A double precision 3D vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3d.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3d.Epsilon">
+            <summary>
+            The vector epsilon.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3d.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3d.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3d.z">
+            <summary>
+            The z component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3d.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3d.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3d.Normalized">
+            <summary>
+            Gets a normalized vector from this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3d.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.#ctor(System.Double)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.#ctor(MeshDecimator.Math.Vector3)">
+            <summary>
+            Creates a new vector from a single precision vector.
+            </summary>
+            <param name="vector">The single precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Addition(MeshDecimator.Math.Vector3d,MeshDecimator.Math.Vector3d)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Subtraction(MeshDecimator.Math.Vector3d,MeshDecimator.Math.Vector3d)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Multiply(MeshDecimator.Math.Vector3d,System.Double)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Multiply(System.Double,MeshDecimator.Math.Vector3d)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling vlaue.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Division(MeshDecimator.Math.Vector3d,System.Double)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_UnaryNegation(MeshDecimator.Math.Vector3d)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Equality(MeshDecimator.Math.Vector3d,MeshDecimator.Math.Vector3d)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Inequality(MeshDecimator.Math.Vector3d,MeshDecimator.Math.Vector3d)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Implicit(MeshDecimator.Math.Vector3)~MeshDecimator.Math.Vector3d">
+            <summary>
+            Implicitly converts from a single-precision vector into a double-precision vector.
+            </summary>
+            <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Set(System.Double,System.Double,System.Double)">
+            <summary>
+            Set x, y and z components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Scale(MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Normalize">
+            <summary>
+            Normalizes this vector.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Clamp(System.Double,System.Double)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Equals(MeshDecimator.Math.Vector3d)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The float format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Dot(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Dot Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Cross(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Cross Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Angle(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Calculates the angle between two vectors.
+            </summary>
+            <param name="from">The from vector.</param>
+            <param name="to">The to vector.</param>
+            <returns>The angle.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Lerp(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@,System.Double,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Performs a linear interpolation between two vectors.
+            </summary>
+            <param name="a">The vector to interpolate from.</param>
+            <param name="b">The vector to interpolate to.</param>
+            <param name="t">The time fraction.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Scale(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.Normalize(MeshDecimator.Math.Vector3d@,MeshDecimator.Math.Vector3d@)">
+            <summary>
+            Normalizes a vector.
+            </summary>
+            <param name="value">The vector to normalize.</param>
+            <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector4">
+            <summary>
+            A single precision 4D vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4.Epsilon">
+            <summary>
+            The vector epsilon.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4.z">
+            <summary>
+            The z component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4.w">
+            <summary>
+            The w component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4.Normalized">
+            <summary>
+            Gets a normalized vector from this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.#ctor(System.Single)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.#ctor(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+            <param name="w">The w value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Addition(MeshDecimator.Math.Vector4,MeshDecimator.Math.Vector4)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Subtraction(MeshDecimator.Math.Vector4,MeshDecimator.Math.Vector4)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Multiply(MeshDecimator.Math.Vector4,System.Single)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Multiply(System.Single,MeshDecimator.Math.Vector4)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling vlaue.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Division(MeshDecimator.Math.Vector4,System.Single)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_UnaryNegation(MeshDecimator.Math.Vector4)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Equality(MeshDecimator.Math.Vector4,MeshDecimator.Math.Vector4)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Inequality(MeshDecimator.Math.Vector4,MeshDecimator.Math.Vector4)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Set(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Set x, y and z components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+            <param name="w">The w value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Scale(MeshDecimator.Math.Vector4@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Normalize">
+            <summary>
+            Normalizes this vector.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Clamp(System.Single,System.Single)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Equals(MeshDecimator.Math.Vector4)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The float format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Dot(MeshDecimator.Math.Vector4@,MeshDecimator.Math.Vector4@)">
+            <summary>
+            Dot Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Lerp(MeshDecimator.Math.Vector4@,MeshDecimator.Math.Vector4@,System.Single,MeshDecimator.Math.Vector4@)">
+            <summary>
+            Performs a linear interpolation between two vectors.
+            </summary>
+            <param name="a">The vector to interpolate from.</param>
+            <param name="b">The vector to interpolate to.</param>
+            <param name="t">The time fraction.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Scale(MeshDecimator.Math.Vector4@,MeshDecimator.Math.Vector4@,MeshDecimator.Math.Vector4@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.Normalize(MeshDecimator.Math.Vector4@,MeshDecimator.Math.Vector4@)">
+            <summary>
+            Normalizes a vector.
+            </summary>
+            <param name="value">The vector to normalize.</param>
+            <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="T:MeshDecimator.Mesh">
+            <summary>
+            A mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.VertexCount">
+            <summary>
+            Gets the count of vertices of this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.SubMeshCount">
+            <summary>
+            Gets or sets the count of submeshes in this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.TriangleCount">
+            <summary>
+            Gets the total count of triangles in this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.Vertices">
+            <summary>
+            Gets or sets the vertices for this mesh. Note that this resets all other vertex attributes.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.Indices">
+            <summary>
+            Gets or sets the indices for this mesh. Once set, the sub-mesh count gets set to 1.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.Normals">
+            <summary>
+            Gets or sets the normals for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.Tangents">
+            <summary>
+            Gets or sets the tangents for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.UV1">
+            <summary>
+            Gets or sets the first UV set for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.UV2">
+            <summary>
+            Gets or sets the second UV set for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.UV3">
+            <summary>
+            Gets or sets the third UV set for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.UV4">
+            <summary>
+            Gets or sets the fourth UV set for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.Colors">
+            <summary>
+            Gets or sets the vertex colors for this mesh.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Mesh.BoneWeights">
+            <summary>
+            Gets or sets the vertex bone weights for this mesh.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Mesh.#ctor(MeshDecimator.Math.Vector3d[],System.Int32[])">
+            <summary>
+            Creates a new mesh.
+            </summary>
+            <param name="vertices">The mesh vertices.</param>
+            <param name="indices">The mesh indices.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.#ctor(MeshDecimator.Math.Vector3d[],System.Int32[][])">
+            <summary>
+            Creates a new mesh.
+            </summary>
+            <param name="vertices">The mesh vertices.</param>
+            <param name="indices">The mesh indices.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.RecalculateNormals">
+            <summary>
+            Recalculates the normals for this mesh smoothly.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Mesh.RecalculateTangents">
+            <summary>
+            Recalculates the tangents for this mesh.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetTriangleCount(System.Int32)">
+            <summary>
+            Returns the count of triangles for a specific sub-mesh in this mesh.
+            </summary>
+            <param name="subMeshIndex">The sub-mesh index.</param>
+            <returns>The triangle count.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetIndices(System.Int32)">
+            <summary>
+            Returns the triangle indices of a specific sub-mesh in this mesh.
+            </summary>
+            <param name="subMeshIndex">The sub-mesh index.</param>
+            <returns>The triangle indices.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetIndices(System.Int32,System.Int32[])">
+            <summary>
+            Sets the triangle indices of a specific sub-mesh in this mesh.
+            </summary>
+            <param name="subMeshIndex">The sub-mesh index.</param>
+            <param name="indices">The triangle indices.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.ToString">
+            <summary>
+            Returns the text-representation of this mesh.
+            </summary>
+            <returns>The text-representation.</returns>
+        </member>
+        <member name="T:MeshDecimator.Algorithm">
+            <summary>
+            The decimation algorithms.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Algorithm.Default">
+            <summary>
+            The default algorithm.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Algorithm.FastQuadraticMesh">
+            <summary>
+            The fast quadratic mesh simplification algorithm.
+            </summary>
+        </member>
+        <member name="T:MeshDecimator.MeshDecimation">
+            <summary>
+            The mesh decimation API.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.CreateAlgorithm(MeshDecimator.Algorithm)">
+            <summary>
+            Creates a specific decimation algorithm.
+            </summary>
+            <param name="algorithm">The desired algorithm.</param>
+            <returns>The decimation algorithm.</returns>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.DecimateMesh(MeshDecimator.Mesh,System.Int32)">
+            <summary>
+            Decimates a mesh.
+            </summary>
+            <param name="mesh">The mesh to decimate.</param>
+            <param name="targetTriangleCount">The target triangle count.</param>
+            <returns>The decimated mesh.</returns>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.DecimateMesh(MeshDecimator.Algorithm,MeshDecimator.Mesh,System.Int32)">
+            <summary>
+            Decimates a mesh.
+            </summary>
+            <param name="algorithm">The desired algorithm.</param>
+            <param name="mesh">The mesh to decimate.</param>
+            <param name="targetTriangleCount">The target triangle count.</param>
+            <returns>The decimated mesh.</returns>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.DecimateMesh(MeshDecimator.Algorithms.DecimationAlgorithm,MeshDecimator.Mesh,System.Int32)">
+            <summary>
+            Decimates a mesh.
+            </summary>
+            <param name="algorithm">The decimation algorithm.</param>
+            <param name="mesh">The mesh to decimate.</param>
+            <param name="targetTriangleCount">The target triangle count.</param>
+            <returns>The decimated mesh.</returns>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.DecimateMeshLossless(MeshDecimator.Mesh)">
+            <summary>
+            Decimates a mesh without losing any quality.
+            </summary>
+            <param name="mesh">The mesh to decimate.</param>
+            <returns>The decimated mesh.</returns>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.DecimateMeshLossless(MeshDecimator.Algorithm,MeshDecimator.Mesh)">
+            <summary>
+            Decimates a mesh without losing any quality.
+            </summary>
+            <param name="algorithm">The desired algorithm.</param>
+            <param name="mesh">The mesh to decimate.</param>
+            <returns>The decimated mesh.</returns>
+        </member>
+        <member name="M:MeshDecimator.MeshDecimation.DecimateMeshLossless(MeshDecimator.Algorithms.DecimationAlgorithm,MeshDecimator.Mesh)">
+            <summary>
+            Decimates a mesh without losing any quality.
+            </summary>
+            <param name="algorithm">The decimation algorithm.</param>
+            <param name="mesh">The mesh to decimate.</param>
+            <returns>The decimated mesh.</returns>
+        </member>
+    </members>
+</doc>
