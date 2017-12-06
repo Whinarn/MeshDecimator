@@ -65,6 +65,7 @@ namespace MeshDecimator.UnityEditor
                 EditorUtility.ClearProgressBar();
             }
 
+            generatedProp = serializedObject.FindProperty("generated");
             generatedProp.boolValue = true;
             isGeneratingNew = false;
         }
