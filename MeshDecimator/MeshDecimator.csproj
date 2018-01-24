@@ -43,7 +43,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\FastQuadraticMeshSimplification.cs" />
+    <Compile Include="Algorithms\FastQuadricMeshSimplification.cs" />
     <Compile Include="Algorithms\DecimationAlgorithm.cs" />
     <Compile Include="Collections\ResizeableArray.cs" />
     <Compile Include="BoneWeight.cs" />

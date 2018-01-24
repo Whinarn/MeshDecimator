@@ -45,9 +45,9 @@ using MeshDecimator.Math;
 namespace MeshDecimator.Algorithms
 {
     /// <summary>
-    /// The fast quadratic mesh simplification algorithm.
+    /// The fast quadric mesh simplification algorithm.
     /// </summary>
-    public sealed class FastQuadraticMeshSimplification : DecimationAlgorithm
+    public sealed class FastQuadricMeshSimplification : DecimationAlgorithm
     {
         #region Consts
         private const double DoubleEpsilon = 1.0E-3;
@@ -201,9 +201,9 @@ namespace MeshDecimator.Algorithms
 
         #region Constructor
         /// <summary>
-        /// Creates a new fast quadratic mesh simplification algorithm.
+        /// Creates a new fast quadric mesh simplification algorithm.
         /// </summary>
-        public FastQuadraticMeshSimplification()
+        public FastQuadricMeshSimplification()
         {
             triangles = new ResizableArray<Triangle>(0);
             vertices = new ResizableArray<Vertex>(0);

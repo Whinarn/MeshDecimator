@@ -40,9 +40,9 @@ namespace MeshDecimator
         /// </summary>
         Default,
         /// <summary>
-        /// The fast quadratic mesh simplification algorithm.
+        /// The fast quadric mesh simplification algorithm.
         /// </summary>
-        FastQuadraticMesh
+        FastQuadricMesh
     }
     #endregion
 
@@ -65,8 +65,8 @@ namespace MeshDecimator
             switch (algorithm)
             {
                 case Algorithm.Default:
-                case Algorithm.FastQuadraticMesh:
-                    alg = new FastQuadraticMeshSimplification();
+                case Algorithm.FastQuadricMesh:
+                    alg = new FastQuadricMeshSimplification();
                     break;
                 default:
                     throw new ArgumentException("The specified algorithm is not supported.", "algorithm");
