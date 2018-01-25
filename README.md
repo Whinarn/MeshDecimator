@@ -2,7 +2,7 @@
 A mesh decimation library for .NET and Unity. The project is written entirely in C# and released under the MIT license.
 
 ## Compatibility
-This provided Unity Example project is currently compatible with Unity 2017.2
+This provided Unity Example project is currently compatible with Unity 2017.3
 
 ## Installation into Unity
 After building the project, copy over *MeshDecimator.dll* and *MeshDecimator.xml* into your Unity project, anywhere within your Assets directory (for example *Assets/MeshDecimator*).
