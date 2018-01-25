@@ -4,65 +4,65 @@
         <name>MeshDecimator</name>
     </assembly>
     <members>
-        <member name="T:MeshDecimator.Algorithms.FastQuadraticMeshSimplification">
+        <member name="T:MeshDecimator.Algorithms.FastQuadricMeshSimplification">
             <summary>
-            The fast quadratic mesh simplification algorithm.
+            The fast quadric mesh simplification algorithm.
             </summary>
         </member>
-        <member name="P:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Agressiveness">
+        <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.Agressiveness">
             <summary>
             Gets or sets the agressiveness of this algorithm. Higher number equals higher quality, but more expensive to run.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.#ctor">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.#ctor">
             <summary>
-            Creates a new fast quadratic mesh simplification algorithm.
+            Creates a new fast quadric mesh simplification algorithm.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Flipped(MeshDecimator.Math.Vector3d,System.Int32,System.Int32,MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean})">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.Flipped(MeshDecimator.Math.Vector3d,System.Int32,System.Int32,MeshDecimator.Algorithms.FastQuadricMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean})">
             <summary>
             Check if a triangle flips when this edge is removed
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.UpdateTriangles(System.Int32,MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.UpdateTriangles(System.Int32,MeshDecimator.Algorithms.FastQuadricMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
             <summary>
             Update triangle connections and edge error after a edge is collapsed.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.RemoveVertexPass(System.Int32,System.Int32,System.Double,MeshDecimator.Collections.ResizableArray{System.Boolean},MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.RemoveVertexPass(System.Int32,System.Int32,System.Double,MeshDecimator.Collections.ResizableArray{System.Boolean},MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
             <summary>
             Remove vertices and mark deleted triangles
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.UpdateMesh(System.Int32)">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.UpdateMesh(System.Int32)">
             <summary>
             Compact triangles, compute edge error and build reference list.
             </summary>
             <param name="iteration">The iteration index.</param>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.CompactMesh">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.CompactMesh">
             <summary>
             Finally compact mesh before exiting.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.Initialize(MeshDecimator.Mesh)">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.Initialize(MeshDecimator.Mesh)">
             <summary>
             Initializes the algorithm with the original mesh.
             </summary>
             <param name="mesh">The mesh.</param>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.DecimateMesh(System.Int32)">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.DecimateMesh(System.Int32)">
             <summary>
             Decimates the mesh.
             </summary>
             <param name="targetTrisCount">The target triangle count.</param>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.DecimateMeshLossless">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.DecimateMeshLossless">
             <summary>
             Decimates the mesh without losing any quality.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadraticMeshSimplification.ToMesh">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.ToMesh">
             <summary>
             Returns the resulting mesh.
             </summary>
@@ -1814,9 +1814,9 @@
             The default algorithm.
             </summary>
         </member>
-        <member name="F:MeshDecimator.Algorithm.FastQuadraticMesh">
+        <member name="F:MeshDecimator.Algorithm.FastQuadricMesh">
             <summary>
-            The fast quadratic mesh simplification algorithm.
+            The fast quadric mesh simplification algorithm.
             </summary>
         </member>
         <member name="T:MeshDecimator.MeshDecimation">
