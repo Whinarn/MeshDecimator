@@ -33,3 +33,10 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Reverse the ignore for meta files in the Unity project
+!*.meta
+
+# PDB files
+*.pdb
+*.pdb.meta
