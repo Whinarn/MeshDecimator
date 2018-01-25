@@ -53,7 +53,7 @@ namespace MeshDecimator.Algorithms
         /// <summary>
         /// If linked vertices should be kept.
         /// </summary>
-        protected bool keepLinkedVertices = true;
+        protected bool keepLinkedVertices = false;
 
         /// <summary>
         /// The maximum vertex count, if any. Zero means no limitation is imposed.
