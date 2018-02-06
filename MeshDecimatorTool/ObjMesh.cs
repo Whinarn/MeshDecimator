@@ -176,11 +176,11 @@ namespace MeshDecimatorTool
                 {
                     var vertex = vertices[i];
                     writer.Write("v ");
-                    writer.Write(vertex.x.ToString("g"));
+                    writer.Write(vertex.x.ToString("g", CultureInfo.InvariantCulture));
                     writer.Write(' ');
-                    writer.Write(vertex.y.ToString("g"));
+                    writer.Write(vertex.y.ToString("g", CultureInfo.InvariantCulture));
                     writer.Write(' ');
-                    writer.Write(vertex.z.ToString("g"));
+                    writer.Write(vertex.z.ToString("g", CultureInfo.InvariantCulture));
                     writer.WriteLine();
                 }
 
