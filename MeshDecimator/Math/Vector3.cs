@@ -207,7 +207,7 @@ namespace MeshDecimator.Math
         /// <summary>
         /// Scales the vector uniformly.
         /// </summary>
-        /// <param name="d">The scaling vlaue.</param>
+        /// <param name="d">The scaling value.</param>
         /// <param name="a">The vector.</param>
         /// <returns>The resulting vector.</returns>
         public static Vector3 operator *(float d, Vector3 a)
