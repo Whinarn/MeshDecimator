@@ -234,6 +234,15 @@ namespace MeshDecimator.Math
         {
             return (lhs - rhs).MagnitudeSqr >= Epsilon;
         }
+
+        /// <summary>
+        /// Explicitly converts from a double-precision vector into a single-precision vector.
+        /// </summary>
+        /// <param name="v">The double-precision vector.</param>
+        public static explicit operator Vector2(Vector2d v)
+        {
+            return new Vector2((float)v.x, (float)v.y);
+        }
         #endregion
 
         #region Public Methods
