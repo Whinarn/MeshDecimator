@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Globalization;
 
 namespace MeshDecimator.Math
 {
@@ -331,7 +332,9 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public override string ToString()
         {
-            return string.Format("({0:F1}, {1:F1})", x, y);
+            return string.Format("({0}, {1})",
+                x.ToString("F1", CultureInfo.InvariantCulture),
+                y.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -341,7 +344,9 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public string ToString(string format)
         {
-            return string.Format("({0}, {1})", x.ToString(format), y.ToString(format));
+            return string.Format("({0}, {1})",
+                x.ToString(format, CultureInfo.InvariantCulture),
+                y.ToString(format, CultureInfo.InvariantCulture));
         }
         #endregion
 
