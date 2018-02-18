@@ -520,6 +520,34 @@ namespace MeshDecimator
         #region UV Sets
         #region Getting
         /// <summary>
+        /// Returns the UV dimension for a specific channel.
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <returns>The UV dimension count.</returns>
+        public int GetUVDimension(int channel)
+        {
+            if (channel < 0 || channel >= UVChannelCount)
+                throw new ArgumentOutOfRangeException("channel");
+
+            if (uvs2D != null && uvs2D[channel] != null)
+            {
+                return 2;
+            }
+            else if (uvs3D != null && uvs3D[channel] != null)
+            {
+                return 3;
+            }
+            else if (uvs4D != null && uvs4D[channel] != null)
+            {
+                return 4;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// Returns the UVs (2D) from a specific channel.
         /// </summary>
         /// <param name="channel">The channel index.</param>
