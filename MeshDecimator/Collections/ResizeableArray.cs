@@ -125,7 +125,8 @@ namespace MeshDecimator.Collections
         /// Resizes this array.
         /// </summary>
         /// <param name="capacity">The new capacity.</param>
-        public void Resize(int capacity)
+        /// <param name="trimExess">If exess memory should be trimmed.</param>
+        public void Resize(int capacity, bool trimExess = false)
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException("capacity");
@@ -139,6 +140,11 @@ namespace MeshDecimator.Collections
                 //Array.Clear(items, capacity, length - capacity);
             }
             length = capacity;
+
+            if (trimExess)
+            {
+                TrimExcess();
+            }
         }
 
         /// <summary>
