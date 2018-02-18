@@ -61,8 +61,22 @@ namespace MeshDecimatorTool
                 ObjMesh sourceObjMesh = new ObjMesh();
                 sourceObjMesh.ReadFile(sourcePath);
                 var sourceVertices = sourceObjMesh.Vertices;
+                var sourceNormals = sourceObjMesh.Normals;
+                var sourceTexCoords2D = sourceObjMesh.TexCoords2D;
+                var sourceTexCoords3D = sourceObjMesh.TexCoords3D;
                 var sourceIndices = sourceObjMesh.Indices;
+
                 var sourceMesh = new Mesh(sourceVertices, sourceIndices);
+                sourceMesh.Normals = sourceNormals;
+
+                if (sourceTexCoords2D != null)
+                {
+                    sourceMesh.SetUVs(0, sourceTexCoords2D);
+                }
+                else if (sourceTexCoords3D != null)
+                {
+                    sourceMesh.SetUVs(0, sourceTexCoords3D);
+                }
 
                 int currentTriangleCount = sourceIndices.Length / 3;
                 int targetTriangleCount = (int)Math.Ceiling(currentTriangleCount * quality);
@@ -79,8 +93,23 @@ namespace MeshDecimatorTool
                 stopwatch.Stop();
 
                 var destVertices = destMesh.Vertices;
+                var destNormals = destMesh.Normals;
                 var destIndices = destMesh.Indices;
+
                 ObjMesh destObjMesh = new ObjMesh(destVertices, destIndices);
+                destObjMesh.Normals = destNormals;
+
+                if (sourceTexCoords2D != null)
+                {
+                    var destUVs = destMesh.GetUVs2D(0);
+                    destObjMesh.TexCoords2D = destUVs;
+                }
+                else if (sourceTexCoords3D != null)
+                {
+                    var destUVs = destMesh.GetUVs3D(0);
+                    destObjMesh.TexCoords3D = destUVs;
+                }
+
                 destObjMesh.WriteFile(destPath);
 
                 float reduction = (float)(destIndices.Length / 3) / (float)currentTriangleCount;
