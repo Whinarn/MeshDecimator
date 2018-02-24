@@ -688,7 +688,7 @@ namespace MeshDecimator
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException("channel");
 
-            if (uvs != null)
+            if (uvs != null && uvs.Length > 0)
             {
                 if (uvs.Length != vertices.Length)
                     throw new ArgumentException(string.Format("The vertex UVs must be as many as the vertices. Assigned: {0}  Require: {1}", uvs.Length, vertices.Length));
@@ -729,7 +729,7 @@ namespace MeshDecimator
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException("channel");
 
-            if (uvs != null)
+            if (uvs != null && uvs.Length > 0)
             {
                 int uvCount = uvs.Length;
                 if (uvCount != vertices.Length)
@@ -770,7 +770,7 @@ namespace MeshDecimator
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException("channel");
 
-            if (uvs != null)
+            if (uvs != null && uvs.Length > 0)
             {
                 int uvCount = uvs.Length;
                 if (uvCount != vertices.Length)
@@ -811,7 +811,7 @@ namespace MeshDecimator
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException("channel");
 
-            if (uvs != null)
+            if (uvs != null && uvs.Count > 0)
             {
                 int uvCount = uvs.Count;
                 if (uvCount != vertices.Length)
@@ -852,7 +852,7 @@ namespace MeshDecimator
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException("channel");
 
-            if (uvs != null)
+            if (uvs != null && uvs.Count > 0)
             {
                 int uvCount = uvs.Count;
                 if (uvCount != vertices.Length)
@@ -893,7 +893,7 @@ namespace MeshDecimator
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException("channel");
 
-            if (uvs != null)
+            if (uvs != null && uvs.Count > 0)
             {
                 int uvCount = uvs.Count;
                 if (uvCount != vertices.Length)
