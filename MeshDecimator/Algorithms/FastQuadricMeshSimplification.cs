@@ -837,10 +837,6 @@ namespace MeshDecimator.Algorithms
             var meshVertices = mesh.Vertices;
             var meshNormals = mesh.Normals;
             var meshTangents = mesh.Tangents;
-            var meshUV1 = mesh.UV1;
-            var meshUV2 = mesh.UV2;
-            var meshUV3 = mesh.UV3;
-            var meshUV4 = mesh.UV4;
             var meshColors = mesh.Colors;
             var meshBoneWeights = mesh.BoneWeights;
             subMeshCount = meshSubMeshCount;
