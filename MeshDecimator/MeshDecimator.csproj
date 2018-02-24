@@ -47,6 +47,7 @@
     <Compile Include="Algorithms\DecimationAlgorithm.cs" />
     <Compile Include="Collections\ResizableArray.cs" />
     <Compile Include="BoneWeight.cs" />
+    <Compile Include="Collections\UVChannels.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Math\MathHelper.cs" />

@@ -163,65 +163,6 @@ namespace MeshDecimator.Algorithms
             }
         }
         #endregion
-
-        #region UV Sets
-        private class UVSets<TVec>
-        {
-            private ResizableArray<TVec>[] channels = null;
-            private TVec[][] channelsData = null;
-
-            public TVec[][] Data
-            {
-                get
-                {
-                    for (int i = 0; i < Mesh.UVChannelCount; i++)
-                    {
-                        if (channels[i] != null)
-                        {
-                            channelsData[i] = channels[i].Data;
-                        }
-                        else
-                        {
-                            channelsData[i] = null;
-                        }
-                    }
-                    return channelsData;
-                }
-            }
-
-            /// <summary>
-            /// Gets or sets a specific channel by index.
-            /// </summary>
-            /// <param name="index">The channel index.</param>
-            public ResizableArray<TVec> this[int index]
-            {
-                get { return channels[index]; }
-                set { channels[index] = value; }
-            }
-
-            public UVSets()
-            {
-                channels = new ResizableArray<TVec>[Mesh.UVChannelCount];
-                channelsData = new TVec[Mesh.UVChannelCount][];
-            }
-
-            /// <summary>
-            /// Resizes all channels at once.
-            /// </summary>
-            /// <param name="capacity">The new capacity.</param>
-            /// <param name="trimExess">If exess memory should be trimmed.</param>
-            public void Resize(int capacity, bool trimExess = false)
-            {
-                for (int i = 0; i < Mesh.UVChannelCount; i++)
-                {
-                    if (channels[i] != null)
-                    {
-                        channels[i].Resize(capacity, trimExess);
-                    }
-                }
-            }
-        }
-        #endregion
         #endregion
 
         #region Fields
@@ -234,9 +175,9 @@ namespace MeshDecimator.Algorithms
 
         private ResizableArray<Vector3> vertNormals = null;
         private ResizableArray<Vector4> vertTangents = null;
-        private UVSets<Vector2> vertUV2D = null;
-        private UVSets<Vector3> vertUV3D = null;
-        private UVSets<Vector4> vertUV4D = null;
+        private UVChannels<Vector2> vertUV2D = null;
+        private UVChannels<Vector3> vertUV3D = null;
+        private UVChannels<Vector4> vertUV4D = null;
         private ResizableArray<Vector4> vertColors = null;
         private ResizableArray<BoneWeight> vertBoneWeights = null;
 
@@ -972,7 +913,7 @@ namespace MeshDecimator.Algorithms
                 if (uvDim == 2)
                 {
                     if (vertUV4D == null)
-                        vertUV2D = new UVSets<Vector2>();
+                        vertUV2D = new UVChannels<Vector2>();
 
                     var uvs = mesh.GetUVs2D(i);
                     vertUV2D[i] = InitializeVertexAttribute(uvs);
@@ -980,7 +921,7 @@ namespace MeshDecimator.Algorithms
                 else if (uvDim == 3)
                 {
                     if (vertUV3D == null)
-                        vertUV3D = new UVSets<Vector3>();
+                        vertUV3D = new UVChannels<Vector3>();
 
                     var uvs = mesh.GetUVs3D(i);
                     vertUV3D[i] = InitializeVertexAttribute(uvs);
@@ -988,7 +929,7 @@ namespace MeshDecimator.Algorithms
                 else if (uvDim == 4)
                 {
                     if (vertUV4D == null)
-                        vertUV4D = new UVSets<Vector4>();
+                        vertUV4D = new UVChannels<Vector4>();
 
                     var uvs = mesh.GetUVs4D(i);
                     vertUV4D[i] = InitializeVertexAttribute(uvs);
