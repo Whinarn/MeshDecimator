@@ -275,8 +275,7 @@ namespace MeshDecimator.Algorithms
         {
             if (attributeValues != null && attributeValues.Length == vertices.Length)
             {
-                var newArray = new ResizableArray<T>(0);
-                newArray.Resize(attributeValues.Length);
+                var newArray = new ResizableArray<T>(attributeValues.Length, attributeValues.Length);
                 var newArrayData = newArray.Data;
                 Array.Copy(attributeValues, 0, newArrayData, 0, attributeValues.Length);
                 return newArray;

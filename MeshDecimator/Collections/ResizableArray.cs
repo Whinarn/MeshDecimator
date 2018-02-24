@@ -34,10 +34,6 @@ namespace MeshDecimator.Collections
     /// <typeparam name="T">The item type.</typeparam>
     internal sealed class ResizableArray<T>
     {
-        #region Consts
-        private const int DefaultCapacity = 8;
-        #endregion
-
         #region Fields
         private T[] items = null;
         private int length = 0;
@@ -78,8 +74,9 @@ namespace MeshDecimator.Collections
         /// <summary>
         /// Creates a new resizable array.
         /// </summary>
-        public ResizableArray()
-            : this(DefaultCapacity)
+        /// <param name="capacity">The initial array capacity.</param>
+        public ResizableArray(int capacity)
+            : this(capacity, 0)
         {
 
         }
@@ -88,17 +85,20 @@ namespace MeshDecimator.Collections
         /// Creates a new resizable array.
         /// </summary>
         /// <param name="capacity">The initial array capacity.</param>
-        public ResizableArray(int capacity)
+        /// <param name="length">The initial length of the array.</param>
+        public ResizableArray(int capacity, int length)
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException("capacity");
+            else if (length < 0 || length > capacity)
+                throw new ArgumentOutOfRangeException("length");
 
             if (capacity > 0)
                 items = new T[capacity];
             else
                 items = emptyArr;
 
-            length = 0;
+            this.length = length;
         }
         #endregion
 
