@@ -175,10 +175,9 @@ namespace MeshDecimator.Algorithms
 
         private ResizableArray<Vector3> vertNormals = null;
         private ResizableArray<Vector4> vertTangents = null;
-        private ResizableArray<Vector2> vertUV1 = null;
-        private ResizableArray<Vector2> vertUV2 = null;
-        private ResizableArray<Vector2> vertUV3 = null;
-        private ResizableArray<Vector2> vertUV4 = null;
+        private UVChannels<Vector2> vertUV2D = null;
+        private UVChannels<Vector3> vertUV3D = null;
+        private UVChannels<Vector4> vertUV4D = null;
         private ResizableArray<Vector4> vertColors = null;
         private ResizableArray<BoneWeight> vertBoneWeights = null;
 
@@ -217,8 +216,7 @@ namespace MeshDecimator.Algorithms
         {
             if (attributeValues != null && attributeValues.Length == vertices.Length)
             {
-                var newArray = new ResizableArray<T>(0);
-                newArray.Resize(attributeValues.Length);
+                var newArray = new ResizableArray<T>(attributeValues.Length, attributeValues.Length);
                 var newArrayData = newArray.Data;
                 Array.Copy(attributeValues, 0, newArrayData, 0, attributeValues.Length);
                 return newArray;
@@ -379,21 +377,38 @@ namespace MeshDecimator.Algorithms
             {
                 vertTangents[i0] = (vertTangents[i0] + vertTangents[i1]) * 0.5f;
             }
-            if (vertUV1 != null)
+            if (vertUV2D != null)
             {
-                vertUV1[i0] = (vertUV1[i0] + vertUV1[i1]) * 0.5f;
+                for (int i = 0; i < Mesh.UVChannelCount; i++)
+                {
+                    var vertUV = vertUV2D[i];
+                    if (vertUV != null)
+                    {
+                        vertUV[i0] = (vertUV[i0] + vertUV[i1]) * 0.5f;
+                    }
+                }
             }
-            if (vertUV2 != null)
+            if (vertUV3D != null)
             {
-                vertUV2[i0] = (vertUV2[i0] + vertUV2[i1]) * 0.5f;
+                for (int i = 0; i < Mesh.UVChannelCount; i++)
+                {
+                    var vertUV = vertUV3D[i];
+                    if (vertUV != null)
+                    {
+                        vertUV[i0] = (vertUV[i0] + vertUV[i1]) * 0.5f;
+                    }
+                }
             }
-            if (vertUV3 != null)
+            if (vertUV4D != null)
             {
-                vertUV3[i0] = (vertUV3[i0] + vertUV3[i1]) * 0.5f;
-            }
-            if (vertUV4 != null)
-            {
-                vertUV4[i0] = (vertUV4[i0] + vertUV4[i1]) * 0.5f;
+                for (int i = 0; i < Mesh.UVChannelCount; i++)
+                {
+                    var vertUV = vertUV4D[i];
+                    if (vertUV != null)
+                    {
+                        vertUV[i0] = (vertUV[i0] + vertUV[i1]) * 0.5f;
+                    }
+                }
             }
             if (vertColors != null)
             {
@@ -727,10 +742,9 @@ namespace MeshDecimator.Algorithms
 
             var vertNormals = (this.vertNormals != null ? this.vertNormals.Data : null);
             var vertTangents = (this.vertTangents != null ? this.vertTangents.Data : null);
-            var vertUV1 = (this.vertUV1 != null ? this.vertUV1.Data : null);
-            var vertUV2 = (this.vertUV2 != null ? this.vertUV2.Data : null);
-            var vertUV3 = (this.vertUV3 != null ? this.vertUV3.Data : null);
-            var vertUV4 = (this.vertUV4 != null ? this.vertUV4.Data : null);
+            var vertUV2D = (this.vertUV2D != null ? this.vertUV2D.Data : null);
+            var vertUV3D = (this.vertUV3D != null ? this.vertUV3D.Data : null);
+            var vertUV4D = (this.vertUV4D != null ? this.vertUV4D.Data : null);
             var vertColors = (this.vertColors != null ? this.vertColors.Data : null);
             var vertBoneWeights = (this.vertBoneWeights != null ? this.vertBoneWeights.Data : null);
             dst = 0;
@@ -747,10 +761,39 @@ namespace MeshDecimator.Algorithms
                         vertices[dst].p = vert.p;
                         if (vertNormals != null) vertNormals[dst] = vertNormals[i];
                         if (vertTangents != null) vertTangents[dst] = vertTangents[i];
-                        if (vertUV1 != null) vertUV1[dst] = vertUV1[i];
-                        if (vertUV2 != null) vertUV2[dst] = vertUV2[i];
-                        if (vertUV3 != null) vertUV3[dst] = vertUV3[i];
-                        if (vertUV4 != null) vertUV4[dst] = vertUV4[i];
+                        if (vertUV2D != null)
+                        {
+                            for (int j = 0; j < Mesh.UVChannelCount; j++)
+                            {
+                                var vertUV = vertUV2D[j];
+                                if (vertUV != null)
+                                {
+                                    vertUV[dst] = vertUV[i];
+                                }
+                            }
+                        }
+                        if (vertUV3D != null)
+                        {
+                            for (int j = 0; j < Mesh.UVChannelCount; j++)
+                            {
+                                var vertUV = vertUV3D[j];
+                                if (vertUV != null)
+                                {
+                                    vertUV[dst] = vertUV[i];
+                                }
+                            }
+                        }
+                        if (vertUV4D != null)
+                        {
+                            for (int j = 0; j < Mesh.UVChannelCount; j++)
+                            {
+                                var vertUV = vertUV4D[j];
+                                if (vertUV != null)
+                                {
+                                    vertUV[dst] = vertUV[i];
+                                }
+                            }
+                        }
                         if (vertColors != null) vertColors[dst] = vertColors[i];
                         if (vertBoneWeights != null) vertBoneWeights[dst] = vertBoneWeights[i];
                     }
@@ -767,14 +810,13 @@ namespace MeshDecimator.Algorithms
             }
 
             this.vertices.Resize(dst);
-            if (vertNormals != null) this.vertNormals.Resize(dst);
-            if (vertTangents != null) this.vertTangents.Resize(dst);
-            if (vertUV1 != null) this.vertUV1.Resize(dst);
-            if (vertUV2 != null) this.vertUV2.Resize(dst);
-            if (vertUV3 != null) this.vertUV3.Resize(dst);
-            if (vertUV4 != null) this.vertUV4.Resize(dst);
-            if (vertColors != null) this.vertColors.Resize(dst);
-            if (vertBoneWeights != null) this.vertBoneWeights.Resize(dst);
+            if (vertNormals != null) this.vertNormals.Resize(dst, true);
+            if (vertTangents != null) this.vertTangents.Resize(dst, true);
+            if (vertUV2D != null) this.vertUV2D.Resize(dst, true);
+            if (vertUV3D != null) this.vertUV3D.Resize(dst, true);
+            if (vertUV4D != null) this.vertUV4D.Resize(dst, true);
+            if (vertColors != null) this.vertColors.Resize(dst, true);
+            if (vertBoneWeights != null) this.vertBoneWeights.Resize(dst, true);
         }
         #endregion
         #endregion
@@ -795,10 +837,6 @@ namespace MeshDecimator.Algorithms
             var meshVertices = mesh.Vertices;
             var meshNormals = mesh.Normals;
             var meshTangents = mesh.Tangents;
-            var meshUV1 = mesh.UV1;
-            var meshUV2 = mesh.UV2;
-            var meshUV3 = mesh.UV3;
-            var meshUV4 = mesh.UV4;
             var meshColors = mesh.Colors;
             var meshBoneWeights = mesh.BoneWeights;
             subMeshCount = meshSubMeshCount;
@@ -862,12 +900,37 @@ namespace MeshDecimator.Algorithms
 
             vertNormals = InitializeVertexAttribute(meshNormals);
             vertTangents = InitializeVertexAttribute(meshTangents);
-            vertUV1 = InitializeVertexAttribute(meshUV1);
-            vertUV2 = InitializeVertexAttribute(meshUV2);
-            vertUV3 = InitializeVertexAttribute(meshUV3);
-            vertUV4 = InitializeVertexAttribute(meshUV4);
             vertColors = InitializeVertexAttribute(meshColors);
             vertBoneWeights = InitializeVertexAttribute(meshBoneWeights);
+
+            for (int i = 0; i < Mesh.UVChannelCount; i++)
+            {
+                int uvDim = mesh.GetUVDimension(i);
+                if (uvDim == 2)
+                {
+                    if (vertUV4D == null)
+                        vertUV2D = new UVChannels<Vector2>();
+
+                    var uvs = mesh.GetUVs2D(i);
+                    vertUV2D[i] = InitializeVertexAttribute(uvs);
+                }
+                else if (uvDim == 3)
+                {
+                    if (vertUV3D == null)
+                        vertUV3D = new UVChannels<Vector3>();
+
+                    var uvs = mesh.GetUVs3D(i);
+                    vertUV3D[i] = InitializeVertexAttribute(uvs);
+                }
+                else if (uvDim == 4)
+                {
+                    if (vertUV4D == null)
+                        vertUV4D = new UVChannels<Vector4>();
+
+                    var uvs = mesh.GetUVs4D(i);
+                    vertUV4D[i] = InitializeVertexAttribute(uvs);
+                }
+            }
         }
         #endregion
 
@@ -1052,43 +1115,55 @@ namespace MeshDecimator.Algorithms
 
             if (vertNormals != null)
             {
-                vertNormals.TrimExcess();
                 newMesh.Normals = vertNormals.Data;
             }
             if (vertTangents != null)
             {
-                vertTangents.TrimExcess();
                 newMesh.Tangents = vertTangents.Data;
-            }
-            if (vertUV1 != null)
-            {
-                vertUV1.TrimExcess();
-                newMesh.UV1 = vertUV1.Data;
-            }
-            if (vertUV2 != null)
-            {
-                vertUV2.TrimExcess();
-                newMesh.UV2 = vertUV2.Data;
-            }
-            if (vertUV3 != null)
-            {
-                vertUV3.TrimExcess();
-                newMesh.UV3 = vertUV3.Data;
-            }
-            if (vertUV4 != null)
-            {
-                vertUV4.TrimExcess();
-                newMesh.UV4 = vertUV4.Data;
             }
             if (vertColors != null)
             {
-                vertColors.TrimExcess();
                 newMesh.Colors = vertColors.Data;
             }
             if (vertBoneWeights != null)
             {
-                vertBoneWeights.TrimExcess();
                 newMesh.BoneWeights = vertBoneWeights.Data;
+            }
+
+            if (vertUV2D != null)
+            {
+                for (int i = 0; i < Mesh.UVChannelCount; i++)
+                {
+                    if (vertUV2D[i] != null)
+                    {
+                        var uvSet = vertUV2D[i].Data;
+                        newMesh.SetUVs(i, uvSet);
+                    }
+                }
+            }
+
+            if (vertUV3D != null)
+            {
+                for (int i = 0; i < Mesh.UVChannelCount; i++)
+                {
+                    if (vertUV3D[i] != null)
+                    {
+                        var uvSet = vertUV3D[i].Data;
+                        newMesh.SetUVs(i, uvSet);
+                    }
+                }
+            }
+
+            if (vertUV4D != null)
+            {
+                for (int i = 0; i < Mesh.UVChannelCount; i++)
+                {
+                    if (vertUV4D[i] != null)
+                    {
+                        var uvSet = vertUV4D[i].Data;
+                        newMesh.SetUVs(i, uvSet);
+                    }
+                }
             }
 
             return newMesh;
