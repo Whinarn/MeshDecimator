@@ -163,10 +163,10 @@ namespace MeshDecimatorTool
         public void ReadFile(string path)
         {
             var vertexList = new List<Vector3d>(VertexInitialCapacity);
-            var normalList = new List<Vector3>(VertexInitialCapacity);
-            var texCoordList = new List<Vector3>(VertexInitialCapacity);
             var faceList = new List<Vector3i>(IndexInitialCapacity);
             var triangleIndexList = new List<int>(IndexInitialCapacity);
+            List<Vector3> normalList = null;
+            List<Vector3> texCoordList = null;
             var tempFaceList = new List<int>(6);
             bool texCoordsAre3D = false;
 
@@ -197,6 +197,9 @@ namespace MeshDecimatorTool
                         if (lineSplit.Length != 4)
                             throw new InvalidDataException("Normals must be 3 components.");
 
+                        if (normalList == null)
+                            normalList = new List<Vector3>(VertexInitialCapacity);
+
                         float f0, f1, f2;
                         float.TryParse(lineSplit[1], NumberStyles.Float, CultureInfo.InvariantCulture, out f0);
                         float.TryParse(lineSplit[2], NumberStyles.Float, CultureInfo.InvariantCulture, out f1);
@@ -207,6 +210,9 @@ namespace MeshDecimatorTool
                     {
                         if (lineSplit.Length < 3)
                             throw new InvalidDataException("Texture coordinates needs at least 2 components.");
+
+                        if (texCoordList == null)
+                            texCoordList = new List<Vector3>(VertexInitialCapacity);
 
                         float f0, f1, f2;
                         float.TryParse(lineSplit[1], NumberStyles.Float, CultureInfo.InvariantCulture, out f0);
