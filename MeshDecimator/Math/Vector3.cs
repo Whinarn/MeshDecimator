@@ -266,6 +266,15 @@ namespace MeshDecimator.Math
         {
             return new Vector3((float)v.x, (float)v.y, (float)v.z);
         }
+
+        /// <summary>
+        /// Implicitly converts from an integer vector into a single-precision vector.
+        /// </summary>
+        /// <param name="v">The integer vector.</param>
+        public static implicit operator Vector3(Vector3i v)
+        {
+            return new Vector3(v.x, v.y, v.z);
+        }
         #endregion
 
         #region Public Methods

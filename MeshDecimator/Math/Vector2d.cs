@@ -243,6 +243,15 @@ namespace MeshDecimator.Math
         {
             return new Vector2d(v.x, v.y);
         }
+
+        /// <summary>
+        /// Implicitly converts from an integer vector into a double-precision vector.
+        /// </summary>
+        /// <param name="v">The integer vector.</param>
+        public static implicit operator Vector2d(Vector2i v)
+        {
+            return new Vector2d(v.x, v.y);
+        }
         #endregion
 
         #region Public Methods
