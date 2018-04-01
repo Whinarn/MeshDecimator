@@ -45,16 +45,22 @@
   <ItemGroup>
     <Compile Include="Algorithms\FastQuadricMeshSimplification.cs" />
     <Compile Include="Algorithms\DecimationAlgorithm.cs" />
-    <Compile Include="Collections\ResizeableArray.cs" />
+    <Compile Include="Collections\ResizableArray.cs" />
     <Compile Include="BoneWeight.cs" />
+    <Compile Include="Collections\UVChannels.cs" />
     <Compile Include="Loggers\ConsoleLogger.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Math\MathHelper.cs" />
     <Compile Include="Math\SymmetricMatrix.cs" />
     <Compile Include="Math\Vector2.cs" />
+    <Compile Include="Math\Vector2d.cs" />
+    <Compile Include="Math\Vector2i.cs" />
     <Compile Include="Math\Vector3.cs" />
     <Compile Include="Math\Vector3d.cs" />
+    <Compile Include="Math\Vector3i.cs" />
     <Compile Include="Math\Vector4.cs" />
+    <Compile Include="Math\Vector4d.cs" />
+    <Compile Include="Math\Vector4i.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MeshDecimation.cs" />

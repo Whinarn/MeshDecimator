@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2017 Mattias Edlund
+Copyright(c) 2017-2018 Mattias Edlund
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Globalization;
 
 namespace MeshDecimator.Math
 {
@@ -206,7 +207,7 @@ namespace MeshDecimator.Math
         /// <summary>
         /// Scales the vector uniformly.
         /// </summary>
-        /// <param name="d">The scaling vlaue.</param>
+        /// <param name="d">The scaling value.</param>
         /// <param name="a">The vector.</param>
         /// <returns>The resulting vector.</returns>
         public static Vector3 operator *(float d, Vector3 a)
@@ -264,6 +265,15 @@ namespace MeshDecimator.Math
         public static explicit operator Vector3(Vector3d v)
         {
             return new Vector3((float)v.x, (float)v.y, (float)v.z);
+        }
+
+        /// <summary>
+        /// Implicitly converts from an integer vector into a single-precision vector.
+        /// </summary>
+        /// <param name="v">The integer vector.</param>
+        public static implicit operator Vector3(Vector3i v)
+        {
+            return new Vector3(v.x, v.y, v.z);
         }
         #endregion
 
@@ -370,7 +380,10 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public override string ToString()
         {
-            return string.Format("({0:F1}, {1:F1}, {2:F1})", x, y, z);
+            return string.Format("({0}, {1}, {2})",
+                x.ToString("F1", CultureInfo.InvariantCulture),
+                y.ToString("F1", CultureInfo.InvariantCulture),
+                z.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -380,7 +393,10 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public string ToString(string format)
         {
-            return string.Format("({0}, {1}, {2})", x.ToString(format), y.ToString(format), z.ToString(format));
+            return string.Format("({0}, {1}, {2})",
+                x.ToString(format, CultureInfo.InvariantCulture),
+                y.ToString(format, CultureInfo.InvariantCulture),
+                z.ToString(format, CultureInfo.InvariantCulture));
         }
         #endregion
 
