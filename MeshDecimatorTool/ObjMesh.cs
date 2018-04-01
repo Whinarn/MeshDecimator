@@ -261,8 +261,8 @@ namespace MeshDecimatorTool
                                 int splitIndex1 = word.IndexOf('/');
                                 int splitIndex2 = word.IndexOf('/', splitIndex1 + 1);
                                 string word1 = word.Substring(0, splitIndex1);
-                                string word2 = word.Substring(splitIndex1, splitIndex2 - splitIndex1);
-                                string word3 = word.Substring(splitIndex2);
+                                string word2 = word.Substring(splitIndex1 + 1, splitIndex2 - splitIndex1 - 1);
+                                string word3 = word.Substring(splitIndex2 + 1);
                                 int.TryParse(word1, out index);
                                 bool hasTexCoord = int.TryParse(word2, out texIndex);
                                 int.TryParse(word3, out normalIndex);
