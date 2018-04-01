@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Globalization;
 
 namespace MeshDecimator.Math
 {
@@ -183,7 +184,7 @@ namespace MeshDecimator.Math
         /// <summary>
         /// Scales the vector uniformly.
         /// </summary>
-        /// <param name="d">The scaling vlaue.</param>
+        /// <param name="d">The scaling value.</param>
         /// <param name="a">The vector.</param>
         /// <returns>The resulting vector.</returns>
         public static Vector2 operator *(float d, Vector2 a)
@@ -232,6 +233,15 @@ namespace MeshDecimator.Math
         public static bool operator !=(Vector2 lhs, Vector2 rhs)
         {
             return (lhs - rhs).MagnitudeSqr >= Epsilon;
+        }
+
+        /// <summary>
+        /// Explicitly converts from a double-precision vector into a single-precision vector.
+        /// </summary>
+        /// <param name="v">The double-precision vector.</param>
+        public static explicit operator Vector2(Vector2d v)
+        {
+            return new Vector2((float)v.x, (float)v.y);
         }
         #endregion
 
@@ -331,7 +341,9 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public override string ToString()
         {
-            return string.Format("({0:F1}, {1:F1})", x, y);
+            return string.Format("({0}, {1})",
+                x.ToString("F1", CultureInfo.InvariantCulture),
+                y.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -341,7 +353,9 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public string ToString(string format)
         {
-            return string.Format("({0}, {1})", x.ToString(format), y.ToString(format));
+            return string.Format("({0}, {1})",
+                x.ToString(format, CultureInfo.InvariantCulture),
+                y.ToString(format, CultureInfo.InvariantCulture));
         }
         #endregion
 

@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Globalization;
 
 namespace MeshDecimator.Math
 {
@@ -207,7 +208,7 @@ namespace MeshDecimator.Math
         /// <summary>
         /// Scales the vector uniformly.
         /// </summary>
-        /// <param name="d">The scaling vlaue.</param>
+        /// <param name="d">The scaling value.</param>
         /// <param name="a">The vector.</param>
         /// <returns>The resulting vector.</returns>
         public static Vector4 operator *(float d, Vector4 a)
@@ -256,6 +257,15 @@ namespace MeshDecimator.Math
         public static bool operator !=(Vector4 lhs, Vector4 rhs)
         {
             return (lhs - rhs).MagnitudeSqr >= Epsilon;
+        }
+
+        /// <summary>
+        /// Explicitly converts from a double-precision vector into a single-precision vector.
+        /// </summary>
+        /// <param name="v">The double-precision vector.</param>
+        public static explicit operator Vector4(Vector4d v)
+        {
+            return new Vector4((float)v.x, (float)v.y, (float)v.z, (float)v.w);
         }
         #endregion
 
@@ -369,7 +379,11 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public override string ToString()
         {
-            return string.Format("({0:F1}, {1:F1}, {2:F1}, {3:F1})", x, y, z, w);
+            return string.Format("({0}, {1}, {2}, {3})",
+                x.ToString("F1", CultureInfo.InvariantCulture),
+                y.ToString("F1", CultureInfo.InvariantCulture),
+                z.ToString("F1", CultureInfo.InvariantCulture),
+                w.ToString("F1", CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -379,7 +393,11 @@ namespace MeshDecimator.Math
         /// <returns>The string.</returns>
         public string ToString(string format)
         {
-            return string.Format("({0}, {1}, {2}, {3})", x.ToString(format), y.ToString(format), z.ToString(format), w.ToString(format));
+            return string.Format("({0}, {1}, {2}, {3})",
+                x.ToString(format, CultureInfo.InvariantCulture),
+                y.ToString(format, CultureInfo.InvariantCulture),
+                z.ToString(format, CultureInfo.InvariantCulture),
+                w.ToString(format, CultureInfo.InvariantCulture));
         }
         #endregion
 
