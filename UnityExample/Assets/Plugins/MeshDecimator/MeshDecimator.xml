@@ -182,27 +182,30 @@
             <param name="index">The element index.</param>
             <returns>The element value.</returns>
         </member>
-        <member name="M:MeshDecimator.Collections.ResizableArray`1.#ctor">
-            <summary>
-            Creates a new resizable array.
-            </summary>
-        </member>
         <member name="M:MeshDecimator.Collections.ResizableArray`1.#ctor(System.Int32)">
             <summary>
             Creates a new resizable array.
             </summary>
             <param name="capacity">The initial array capacity.</param>
         </member>
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new resizable array.
+            </summary>
+            <param name="capacity">The initial array capacity.</param>
+            <param name="length">The initial length of the array.</param>
+        </member>
         <member name="M:MeshDecimator.Collections.ResizableArray`1.Clear">
             <summary>
             Clears this array.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Collections.ResizableArray`1.Resize(System.Int32)">
+        <member name="M:MeshDecimator.Collections.ResizableArray`1.Resize(System.Int32,System.Boolean)">
             <summary>
             Resizes this array.
             </summary>
-            <param name="capacity">The new capacity.</param>
+            <param name="length">The new length.</param>
+            <param name="trimExess">If exess memory should be trimmed.</param>
         </member>
         <member name="M:MeshDecimator.Collections.ResizableArray`1.TrimExcess">
             <summary>
@@ -214,6 +217,35 @@
             Adds a new item to the end of this array.
             </summary>
             <param name="item">The new item.</param>
+        </member>
+        <member name="T:MeshDecimator.Collections.UVChannels`1">
+            <summary>
+            A collection of UV channels.
+            </summary>
+            <typeparam name="TVec">The UV vector type.</typeparam>
+        </member>
+        <member name="P:MeshDecimator.Collections.UVChannels`1.Data">
+            <summary>
+            Gets the channel collection data.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Collections.UVChannels`1.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific channel by index.
+            </summary>
+            <param name="index">The channel index.</param>
+        </member>
+        <member name="M:MeshDecimator.Collections.UVChannels`1.#ctor">
+            <summary>
+            Creates a new collection of UV channels.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Collections.UVChannels`1.Resize(System.Int32,System.Boolean)">
+            <summary>
+            Resizes all channels at once.
+            </summary>
+            <param name="capacity">The new capacity.</param>
+            <param name="trimExess">If exess memory should be trimmed.</param>
         </member>
         <member name="T:MeshDecimator.BoneWeight">
             <summary>
@@ -835,7 +867,7 @@
             <summary>
             Scales the vector uniformly.
             </summary>
-            <param name="d">The scaling vlaue.</param>
+            <param name="d">The scaling value.</param>
             <param name="a">The vector.</param>
             <returns>The resulting vector.</returns>
         </member>
@@ -869,6 +901,18 @@
             <param name="lhs">The left hand side vector.</param>
             <param name="rhs">The right hand side vector.</param>
             <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Explicit(MeshDecimator.Math.Vector2d)~MeshDecimator.Math.Vector2">
+            <summary>
+            Explicitly converts from a double-precision vector into a single-precision vector.
+            </summary>
+            <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2.op_Implicit(MeshDecimator.Math.Vector2i)~MeshDecimator.Math.Vector2">
+            <summary>
+            Implicitly converts from an integer vector into a single-precision vector.
+            </summary>
+            <param name="v">The integer vector.</param>
         </member>
         <member name="M:MeshDecimator.Math.Vector2.Set(System.Single,System.Single)">
             <summary>
@@ -958,6 +1002,414 @@
             </summary>
             <param name="value">The vector to normalize.</param>
             <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector2d">
+            <summary>
+            A double precision 2D vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2d.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2d.Epsilon">
+            <summary>
+            The vector epsilon.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2d.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2d.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2d.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2d.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2d.Normalized">
+            <summary>
+            Gets a normalized vector from this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2d.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.#ctor(System.Double)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.#ctor(System.Double,System.Double)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Addition(MeshDecimator.Math.Vector2d,MeshDecimator.Math.Vector2d)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Subtraction(MeshDecimator.Math.Vector2d,MeshDecimator.Math.Vector2d)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Multiply(MeshDecimator.Math.Vector2d,System.Double)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Multiply(System.Double,MeshDecimator.Math.Vector2d)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling value.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Division(MeshDecimator.Math.Vector2d,System.Double)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_UnaryNegation(MeshDecimator.Math.Vector2d)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Equality(MeshDecimator.Math.Vector2d,MeshDecimator.Math.Vector2d)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Inequality(MeshDecimator.Math.Vector2d,MeshDecimator.Math.Vector2d)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Implicit(MeshDecimator.Math.Vector2)~MeshDecimator.Math.Vector2d">
+            <summary>
+            Implicitly converts from a single-precision vector into a double-precision vector.
+            </summary>
+            <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.op_Implicit(MeshDecimator.Math.Vector2i)~MeshDecimator.Math.Vector2d">
+            <summary>
+            Implicitly converts from an integer vector into a double-precision vector.
+            </summary>
+            <param name="v">The integer vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Set(System.Double,System.Double)">
+            <summary>
+            Set x and y components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Scale(MeshDecimator.Math.Vector2d@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Normalize">
+            <summary>
+            Normalizes this vector.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Clamp(System.Double,System.Double)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Equals(MeshDecimator.Math.Vector2d)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The float format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Dot(MeshDecimator.Math.Vector2d@,MeshDecimator.Math.Vector2d@)">
+            <summary>
+            Dot Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Lerp(MeshDecimator.Math.Vector2d@,MeshDecimator.Math.Vector2d@,System.Double,MeshDecimator.Math.Vector2d@)">
+            <summary>
+            Performs a linear interpolation between two vectors.
+            </summary>
+            <param name="a">The vector to interpolate from.</param>
+            <param name="b">The vector to interpolate to.</param>
+            <param name="t">The time fraction.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Scale(MeshDecimator.Math.Vector2d@,MeshDecimator.Math.Vector2d@,MeshDecimator.Math.Vector2d@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2d.Normalize(MeshDecimator.Math.Vector2d@,MeshDecimator.Math.Vector2d@)">
+            <summary>
+            Normalizes a vector.
+            </summary>
+            <param name="value">The vector to normalize.</param>
+            <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector2i">
+            <summary>
+            A 2D integer vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2i.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2i.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector2i.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2i.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2i.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector2i.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.#ctor(System.Int32)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Addition(MeshDecimator.Math.Vector2i,MeshDecimator.Math.Vector2i)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Subtraction(MeshDecimator.Math.Vector2i,MeshDecimator.Math.Vector2i)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Multiply(MeshDecimator.Math.Vector2i,System.Int32)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Multiply(System.Int32,MeshDecimator.Math.Vector2i)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling value.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Division(MeshDecimator.Math.Vector2i,System.Int32)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_UnaryNegation(MeshDecimator.Math.Vector2i)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Equality(MeshDecimator.Math.Vector2i,MeshDecimator.Math.Vector2i)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Inequality(MeshDecimator.Math.Vector2i,MeshDecimator.Math.Vector2i)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Explicit(MeshDecimator.Math.Vector2)~MeshDecimator.Math.Vector2i">
+            <summary>
+            Explicitly converts from a single-precision vector into an integer vector.
+            </summary>
+            <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.op_Explicit(MeshDecimator.Math.Vector2d)~MeshDecimator.Math.Vector2i">
+            <summary>
+            Explicitly converts from a double-precision vector into an integer vector.
+            </summary>
+            <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.Set(System.Int32,System.Int32)">
+            <summary>
+            Set x and y components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.Scale(MeshDecimator.Math.Vector2i@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.Clamp(System.Int32,System.Int32)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.Equals(MeshDecimator.Math.Vector2i)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The integer format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector2i.Scale(MeshDecimator.Math.Vector2i@,MeshDecimator.Math.Vector2i@,MeshDecimator.Math.Vector2i@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
         </member>
         <member name="T:MeshDecimator.Math.Vector3">
             <summary>
@@ -1058,7 +1510,7 @@
             <summary>
             Scales the vector uniformly.
             </summary>
-            <param name="d">The scaling vlaue.</param>
+            <param name="d">The scaling value.</param>
             <param name="a">The vector.</param>
             <returns>The resulting vector.</returns>
         </member>
@@ -1098,6 +1550,12 @@
             Explicitly converts from a double-precision vector into a single-precision vector.
             </summary>
             <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3.op_Implicit(MeshDecimator.Math.Vector3i)~MeshDecimator.Math.Vector3">
+            <summary>
+            Implicitly converts from an integer vector into a single-precision vector.
+            </summary>
+            <param name="v">The integer vector.</param>
         </member>
         <member name="M:MeshDecimator.Math.Vector3.Set(System.Single,System.Single,System.Single)">
             <summary>
@@ -1311,7 +1769,7 @@
             <summary>
             Scales the vector uniformly.
             </summary>
-            <param name="d">The scaling vlaue.</param>
+            <param name="d">The scaling value.</param>
             <param name="a">The vector.</param>
             <returns>The resulting vector.</returns>
         </member>
@@ -1351,6 +1809,12 @@
             Implicitly converts from a single-precision vector into a double-precision vector.
             </summary>
             <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3d.op_Implicit(MeshDecimator.Math.Vector3i)~MeshDecimator.Math.Vector3d">
+            <summary>
+            Implicitly converts from an integer vector into a double-precision vector.
+            </summary>
+            <param name="v">The integer vector.</param>
         </member>
         <member name="M:MeshDecimator.Math.Vector3d.Set(System.Double,System.Double,System.Double)">
             <summary>
@@ -1458,6 +1922,198 @@
             <param name="value">The vector to normalize.</param>
             <param name="result">The resulting normalized vector.</param>
         </member>
+        <member name="T:MeshDecimator.Math.Vector3i">
+            <summary>
+            A 3D integer vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3i.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3i.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3i.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector3i.z">
+            <summary>
+            The z component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3i.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3i.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector3i.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.#ctor(System.Int32)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Addition(MeshDecimator.Math.Vector3i,MeshDecimator.Math.Vector3i)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Subtraction(MeshDecimator.Math.Vector3i,MeshDecimator.Math.Vector3i)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Multiply(MeshDecimator.Math.Vector3i,System.Int32)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Multiply(System.Int32,MeshDecimator.Math.Vector3i)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling value.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Division(MeshDecimator.Math.Vector3i,System.Int32)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_UnaryNegation(MeshDecimator.Math.Vector3i)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Equality(MeshDecimator.Math.Vector3i,MeshDecimator.Math.Vector3i)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Inequality(MeshDecimator.Math.Vector3i,MeshDecimator.Math.Vector3i)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Implicit(MeshDecimator.Math.Vector3)~MeshDecimator.Math.Vector3i">
+            <summary>
+            Explicitly converts from a single-precision vector into an integer vector.
+            </summary>
+            <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.op_Explicit(MeshDecimator.Math.Vector3d)~MeshDecimator.Math.Vector3i">
+            <summary>
+            Explicitly converts from a double-precision vector into an integer vector.
+            </summary>
+            <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.Set(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Set x, y and z components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.Scale(MeshDecimator.Math.Vector3i@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.Clamp(System.Int32,System.Int32)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.Equals(MeshDecimator.Math.Vector3i)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The integer format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector3i.Scale(MeshDecimator.Math.Vector3i@,MeshDecimator.Math.Vector3i@,MeshDecimator.Math.Vector3i@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
         <member name="T:MeshDecimator.Math.Vector4">
             <summary>
             A single precision 4D vector.
@@ -1557,7 +2213,7 @@
             <summary>
             Scales the vector uniformly.
             </summary>
-            <param name="d">The scaling vlaue.</param>
+            <param name="d">The scaling value.</param>
             <param name="a">The vector.</param>
             <returns>The resulting vector.</returns>
         </member>
@@ -1591,6 +2247,18 @@
             <param name="lhs">The left hand side vector.</param>
             <param name="rhs">The right hand side vector.</param>
             <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Explicit(MeshDecimator.Math.Vector4d)~MeshDecimator.Math.Vector4">
+            <summary>
+            Explicitly converts from a double-precision vector into a single-precision vector.
+            </summary>
+            <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4.op_Implicit(MeshDecimator.Math.Vector4i)~MeshDecimator.Math.Vector4">
+            <summary>
+            Implicitly converts from an integer vector into a single-precision vector.
+            </summary>
+            <param name="v">The integer vector.</param>
         </member>
         <member name="M:MeshDecimator.Math.Vector4.Set(System.Single,System.Single,System.Single,System.Single)">
             <summary>
@@ -1683,9 +2351,450 @@
             <param name="value">The vector to normalize.</param>
             <param name="result">The resulting normalized vector.</param>
         </member>
+        <member name="T:MeshDecimator.Math.Vector4d">
+            <summary>
+            A double precision 4D vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4d.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4d.Epsilon">
+            <summary>
+            The vector epsilon.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4d.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4d.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4d.z">
+            <summary>
+            The z component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4d.w">
+            <summary>
+            The w component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4d.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4d.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4d.Normalized">
+            <summary>
+            Gets a normalized vector from this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4d.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.#ctor(System.Double)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+            <param name="w">The w value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Addition(MeshDecimator.Math.Vector4d,MeshDecimator.Math.Vector4d)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Subtraction(MeshDecimator.Math.Vector4d,MeshDecimator.Math.Vector4d)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Multiply(MeshDecimator.Math.Vector4d,System.Double)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Multiply(System.Double,MeshDecimator.Math.Vector4d)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling value.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Division(MeshDecimator.Math.Vector4d,System.Double)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_UnaryNegation(MeshDecimator.Math.Vector4d)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Equality(MeshDecimator.Math.Vector4d,MeshDecimator.Math.Vector4d)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Inequality(MeshDecimator.Math.Vector4d,MeshDecimator.Math.Vector4d)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Implicit(MeshDecimator.Math.Vector4)~MeshDecimator.Math.Vector4d">
+            <summary>
+            Implicitly converts from a single-precision vector into a double-precision vector.
+            </summary>
+            <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.op_Implicit(MeshDecimator.Math.Vector4i)~MeshDecimator.Math.Vector4d">
+            <summary>
+            Implicitly converts from an integer vector into a double-precision vector.
+            </summary>
+            <param name="v">The integer vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Set(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Set x, y and z components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+            <param name="w">The w value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Scale(MeshDecimator.Math.Vector4d@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Normalize">
+            <summary>
+            Normalizes this vector.
+            </summary>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Clamp(System.Double,System.Double)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Equals(MeshDecimator.Math.Vector4d)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The float format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Dot(MeshDecimator.Math.Vector4d@,MeshDecimator.Math.Vector4d@)">
+            <summary>
+            Dot Product of two vectors.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Lerp(MeshDecimator.Math.Vector4d@,MeshDecimator.Math.Vector4d@,System.Double,MeshDecimator.Math.Vector4d@)">
+            <summary>
+            Performs a linear interpolation between two vectors.
+            </summary>
+            <param name="a">The vector to interpolate from.</param>
+            <param name="b">The vector to interpolate to.</param>
+            <param name="t">The time fraction.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Scale(MeshDecimator.Math.Vector4d@,MeshDecimator.Math.Vector4d@,MeshDecimator.Math.Vector4d@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4d.Normalize(MeshDecimator.Math.Vector4d@,MeshDecimator.Math.Vector4d@)">
+            <summary>
+            Normalizes a vector.
+            </summary>
+            <param name="value">The vector to normalize.</param>
+            <param name="result">The resulting normalized vector.</param>
+        </member>
+        <member name="T:MeshDecimator.Math.Vector4i">
+            <summary>
+            A 4D integer vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4i.zero">
+            <summary>
+            The zero vector.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4i.x">
+            <summary>
+            The x component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4i.y">
+            <summary>
+            The y component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4i.z">
+            <summary>
+            The z component.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Math.Vector4i.w">
+            <summary>
+            The w component.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4i.Magnitude">
+            <summary>
+            Gets the magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4i.MagnitudeSqr">
+            <summary>
+            Gets the squared magnitude of this vector.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Math.Vector4i.Item(System.Int32)">
+            <summary>
+            Gets or sets a specific component by index in this vector.
+            </summary>
+            <param name="index">The component index.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.#ctor(System.Int32)">
+            <summary>
+            Creates a new vector with one value for all components.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a new vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+            <param name="w">The w value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Addition(MeshDecimator.Math.Vector4i,MeshDecimator.Math.Vector4i)">
+            <summary>
+            Adds two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Subtraction(MeshDecimator.Math.Vector4i,MeshDecimator.Math.Vector4i)">
+            <summary>
+            Subtracts two vectors.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Multiply(MeshDecimator.Math.Vector4i,System.Int32)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The scaling value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Multiply(System.Int32,MeshDecimator.Math.Vector4i)">
+            <summary>
+            Scales the vector uniformly.
+            </summary>
+            <param name="d">The scaling value.</param>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Division(MeshDecimator.Math.Vector4i,System.Int32)">
+            <summary>
+            Divides the vector with a float.
+            </summary>
+            <param name="a">The vector.</param>
+            <param name="d">The dividing float value.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_UnaryNegation(MeshDecimator.Math.Vector4i)">
+            <summary>
+            Subtracts the vector from a zero vector.
+            </summary>
+            <param name="a">The vector.</param>
+            <returns>The resulting vector.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Equality(MeshDecimator.Math.Vector4i,MeshDecimator.Math.Vector4i)">
+            <summary>
+            Returns if two vectors equals eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Inequality(MeshDecimator.Math.Vector4i,MeshDecimator.Math.Vector4i)">
+            <summary>
+            Returns if two vectors don't equal eachother.
+            </summary>
+            <param name="lhs">The left hand side vector.</param>
+            <param name="rhs">The right hand side vector.</param>
+            <returns>If not equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Explicit(MeshDecimator.Math.Vector4)~MeshDecimator.Math.Vector4i">
+            <summary>
+            Explicitly converts from a single-precision vector into an integer vector.
+            </summary>
+            <param name="v">The single-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.op_Explicit(MeshDecimator.Math.Vector4d)~MeshDecimator.Math.Vector4i">
+            <summary>
+            Explicitly converts from a double-precision vector into an integer vector.
+            </summary>
+            <param name="v">The double-precision vector.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.Set(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Set x, y and z components of an existing vector.
+            </summary>
+            <param name="x">The x value.</param>
+            <param name="y">The y value.</param>
+            <param name="z">The z value.</param>
+            <param name="w">The w value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.Scale(MeshDecimator.Math.Vector4i@)">
+            <summary>
+            Multiplies with another vector component-wise.
+            </summary>
+            <param name="scale">The vector to multiply with.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.Clamp(System.Int32,System.Int32)">
+            <summary>
+            Clamps this vector between a specific range.
+            </summary>
+            <param name="min">The minimum component value.</param>
+            <param name="max">The maximum component value.</param>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.GetHashCode">
+            <summary>
+            Returns a hash code for this vector.
+            </summary>
+            <returns>The hash code.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.Equals(System.Object)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.Equals(MeshDecimator.Math.Vector4i)">
+            <summary>
+            Returns if this vector is equal to another one.
+            </summary>
+            <param name="other">The other vector to compare to.</param>
+            <returns>If equals.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.ToString">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.ToString(System.String)">
+            <summary>
+            Returns a nicely formatted string for this vector.
+            </summary>
+            <param name="format">The integer format.</param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:MeshDecimator.Math.Vector4i.Scale(MeshDecimator.Math.Vector4i@,MeshDecimator.Math.Vector4i@,MeshDecimator.Math.Vector4i@)">
+            <summary>
+            Multiplies two vectors component-wise.
+            </summary>
+            <param name="a">The first vector.</param>
+            <param name="b">The second vector.</param>
+            <param name="result">The resulting vector.</param>
+        </member>
         <member name="T:MeshDecimator.Mesh">
             <summary>
             A mesh.
+            </summary>
+        </member>
+        <member name="F:MeshDecimator.Mesh.UVChannelCount">
+            <summary>
+            The count of supported UV channels.
             </summary>
         </member>
         <member name="P:MeshDecimator.Mesh.VertexCount">
@@ -1797,6 +2906,97 @@
             </summary>
             <param name="subMeshIndex">The sub-mesh index.</param>
             <param name="indices">The triangle indices.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVDimension(System.Int32)">
+            <summary>
+            Returns the UV dimension for a specific channel.
+            </summary>
+            <param name="channel"></param>
+            <returns>The UV dimension count.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVs2D(System.Int32)">
+            <summary>
+            Returns the UVs (2D) from a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <returns>The UVs.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVs3D(System.Int32)">
+            <summary>
+            Returns the UVs (3D) from a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <returns>The UVs.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVs4D(System.Int32)">
+            <summary>
+            Returns the UVs (4D) from a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <returns>The UVs.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVs(System.Int32,System.Collections.Generic.List{MeshDecimator.Math.Vector2})">
+            <summary>
+            Returns the UVs (2D) from a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVs(System.Int32,System.Collections.Generic.List{MeshDecimator.Math.Vector3})">
+            <summary>
+            Returns the UVs (3D) from a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetUVs(System.Int32,System.Collections.Generic.List{MeshDecimator.Math.Vector4})">
+            <summary>
+            Returns the UVs (4D) from a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetUVs(System.Int32,MeshDecimator.Math.Vector2[])">
+            <summary>
+            Sets the UVs (2D) for a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetUVs(System.Int32,MeshDecimator.Math.Vector3[])">
+            <summary>
+            Sets the UVs (3D) for a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetUVs(System.Int32,MeshDecimator.Math.Vector4[])">
+            <summary>
+            Sets the UVs (4D) for a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetUVs(System.Int32,System.Collections.Generic.List{MeshDecimator.Math.Vector2})">
+            <summary>
+            Sets the UVs (2D) for a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetUVs(System.Int32,System.Collections.Generic.List{MeshDecimator.Math.Vector3})">
+            <summary>
+            Sets the UVs (3D) for a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
+        </member>
+        <member name="M:MeshDecimator.Mesh.SetUVs(System.Int32,System.Collections.Generic.List{MeshDecimator.Math.Vector4})">
+            <summary>
+            Sets the UVs (4D) for a specific channel.
+            </summary>
+            <param name="channel">The channel index.</param>
+            <param name="uvs">The UVs.</param>
         </member>
         <member name="M:MeshDecimator.Mesh.ToString">
             <summary>
