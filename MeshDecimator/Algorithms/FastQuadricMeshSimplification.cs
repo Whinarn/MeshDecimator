@@ -197,7 +197,9 @@ namespace MeshDecimator.Algorithms
         #endregion
 
         #region Fields
+        private bool preventHoles = true;
         private double agressiveness = 7.0;
+        private double vertexLinkDistanceSqr = double.Epsilon;
 
         private int subMeshCount = 0;
         private ResizableArray<Triangle> triangles = null;
@@ -221,12 +223,31 @@ namespace MeshDecimator.Algorithms
 
         #region Properties
         /// <summary>
+        /// Gets or sets if holes should be prevented as much as possible.
+        /// </summary>
+        public bool PreventHoles
+        {
+            get { return preventHoles; }
+            set { preventHoles = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the agressiveness of this algorithm. Higher number equals higher quality, but more expensive to run.
         /// </summary>
         public double Agressiveness
         {
             get { return agressiveness; }
             set { agressiveness = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the maximum squared distance between two vertices in order to link them.
+        /// Note that this value is only used if PreventHoles is true.
+        /// </summary>
+        public double VertexLinkDistanceSqr
+        {
+            get { return vertexLinkDistanceSqr; }
+            set { vertexLinkDistanceSqr = value; }
         }
         #endregion
 
@@ -675,6 +696,7 @@ namespace MeshDecimator.Algorithms
 
                 int ofs;
                 int id;
+                int borderVertexCount = 0;
                 for (int i = 0; i < vertexCount; i++)
                 {
                     var vertex = vertices[i];
@@ -717,8 +739,56 @@ namespace MeshDecimator.Algorithms
                         {
                             id = vids[j];
                             vertices[id].border = true;
+                            ++borderVertexCount;
                         }
                     }
+                }
+
+                if (preventHoles)
+                {
+                    // First find all border vertices
+                    var borderIndices = new int[borderVertexCount];
+                    int borderIndexCount = 0;
+                    for (int i = 0; i < vertexCount; i++)
+                    {
+                        var v0 = vertices[i];
+                        if (!v0.border)
+                            continue;
+
+                        borderIndices[borderIndexCount++] = i;
+                    }
+
+                    // Then find identical border vertices and bind them together as one
+                    for (int i = 0; i < borderIndexCount; i++)
+                    {
+                        var myIndex = borderIndices[i];
+                        if (myIndex == -1)
+                            continue;
+
+                        var myVertex = vertices[myIndex];
+                        for (int j = i + 1; j < borderIndexCount; j++)
+                        {
+                            var otherIndex = borderIndices[j];
+                            if (otherIndex == -1)
+                                continue;
+
+                            var otherVertex = vertices[otherIndex];
+                            if ((myVertex.p - otherVertex.p).MagnitudeSqr <= vertexLinkDistanceSqr)
+                            {
+                                borderIndices[j] = -1;
+                                vertices[myIndex].border = false;
+
+                                for (int k = 0; k < otherVertex.tcount; k++)
+                                {
+                                    var r = refs[otherVertex.tstart + k];
+                                    triangles[r.tid][r.tvertex] = myIndex;
+                                }
+                            }
+                        }
+                    }
+
+                    // Update the references again
+                    UpdateReferences();
                 }
 
                 // Init Quadrics by Plane & Edge Errors
