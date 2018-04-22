@@ -425,7 +425,7 @@ namespace MeshDecimator.Algorithms
             int triangleCount = this.triangles.Length;
             var vertices = this.vertices.Data;
 
-            bool keepBorders = base.KeepBorders;
+            bool preserveBorders = base.PreserveBorders;
             int maxVertexCount = base.MaxVertexCount;
             if (maxVertexCount <= 0)
                 maxVertexCount = int.MaxValue;
@@ -452,8 +452,8 @@ namespace MeshDecimator.Algorithms
                     // Border check
                     if (v0.border != v1.border)
                         continue;
-                    // If borders should be kept
-                    else if (keepBorders && v0.border)
+                    // If borders should be preserved
+                    else if (preserveBorders && v0.border)
                         continue;
 
                     // Compute vertex to collapse to
