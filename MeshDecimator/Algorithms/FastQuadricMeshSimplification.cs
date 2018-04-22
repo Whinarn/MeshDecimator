@@ -63,6 +63,10 @@ namespace MeshDecimator.Algorithms
             public int v2;
             public int subMeshIndex;
 
+            public int va0;
+            public int va1;
+            public int va2;
+
             //public double area;
 
             public double err0;
@@ -110,6 +114,10 @@ namespace MeshDecimator.Algorithms
                 this.v2 = v2;
                 this.subMeshIndex = subMeshIndex;
 
+                this.va0 = v0;
+                this.va1 = v1;
+                this.va2 = v2;
+
                 //area = 0;
                 err0 = err1 = err2 = err3 = 0;
                 deleted = dirty = false;
@@ -118,6 +126,31 @@ namespace MeshDecimator.Algorithms
             #endregion
 
             #region Public Methods
+            public void GetAttributeIndices(int[] attributeIndices)
+            {
+                attributeIndices[0] = va0;
+                attributeIndices[1] = va1;
+                attributeIndices[2] = va2;
+            }
+
+            public void SetAttributeIndex(int index, int value)
+            {
+                switch (index)
+                {
+                    case 0:
+                        va0 = value;
+                        break;
+                    case 1:
+                        va1 = value;
+                        break;
+                    case 2:
+                        va2 = value;
+                        break;
+                    default:
+                        throw new IndexOutOfRangeException();
+                }
+            }
+
             public void GetErrors(double[] err)
             {
                 err[0] = err0;
@@ -181,8 +214,9 @@ namespace MeshDecimator.Algorithms
 
         private int remainingVertices = 0;
 
-        // Pre-allocated buffer for error values
+        // Pre-allocated buffers
         private double[] errArr = new double[3];
+        private int[] attributeIndexArr = new int[3];
         #endregion
 
         #region Properties
@@ -348,7 +382,7 @@ namespace MeshDecimator.Algorithms
         /// <summary>
         /// Update triangle connections and edge error after a edge is collapsed.
         /// </summary>
-        private void UpdateTriangles(int i0, ref Vertex v, ResizableArray<bool> deleted, ref int deletedTriangles)
+        private void UpdateTriangles(int i0, int ia0, ref Vertex v, ResizableArray<bool> deleted, ref int deletedTriangles)
         {
             Vector3d p;
             int pIndex;
@@ -370,6 +404,11 @@ namespace MeshDecimator.Algorithms
                 }
 
                 t[r.tvertex] = i0;
+                if (ia0 != -1)
+                {
+                    t.SetAttributeIndex(r.tvertex, ia0);
+                }
+
                 t.dirty = true;
                 //t.area = CalculateArea(t.v0, t.v1, t.v2);
                 t.err0 = CalculateError(t.v0, t.v1, out p, out pIndex);
@@ -507,13 +546,15 @@ namespace MeshDecimator.Algorithms
                     continue;
 
                 t.GetErrors(errArr);
+                t.GetAttributeIndices(attributeIndexArr);
                 for (int j = 0; j < 3; j++)
                 {
                     if (errArr[j] > threshold)
                         continue;
 
+                    int k = ((j + 1) % 3);
                     int i0 = t[j];
-                    int i1 = t[(j + 1) % 3];
+                    int i1 = t[k];
                     v0 = vertices[i0];
                     v1 = vertices[i1];
 
@@ -535,24 +576,28 @@ namespace MeshDecimator.Algorithms
                     if (Flipped(p, i1, i0, ref v1, deleted1))
                         continue;
 
+                    int ia0 = attributeIndexArr[j];
+
                     // Not flipped, so remove edge
                     v0.p = p;
                     v0.q += v1.q;
                     vertices[i0] = v0;
                     if (pIndex == 1)
                     {
-                        // Move vertex attributes from i1 to i0
-                        MoveVertexAttributes(i0, i1);
+                        // Move vertex attributes from ia1 to ia0
+                        int ia1 = attributeIndexArr[k];
+                        MoveVertexAttributes(ia0, ia1);
                     }
                     else if (pIndex == 2)
                     {
-                        // Merge vertex attributes i0 and i1 into i0
-                        MergeVertexAttributes(i0, i1);
+                        // Merge vertex attributes ia0 and ia1 into ia0
+                        int ia1 = attributeIndexArr[k];
+                        MergeVertexAttributes(ia0, ia1);
                     }
 
                     int tstart = refs.Length;
-                    UpdateTriangles(i0, ref v0, deleted0, ref deletedTris);
-                    UpdateTriangles(i0, ref v1, deleted1, ref deletedTris);
+                    UpdateTriangles(i0, ia0, ref v0, deleted0, ref deletedTris);
+                    UpdateTriangles(i0, ia0, ref v1, deleted1, ref deletedTris);
 
                     int tcount = refs.Length - tstart;
                     if (tcount <= v0.tcount)
@@ -813,12 +858,30 @@ namespace MeshDecimator.Algorithms
                 var triangle = triangles[i];
                 if (!triangle.deleted)
                 {
+                    if (triangle.va0 != triangle.v0)
+                    {
+                        vertices[triangle.va0].p = vertices[triangle.v0].p;
+                        triangle.v0 = triangle.va0;
+                    }
+                    if (triangle.va1 != triangle.v1)
+                    {
+                        vertices[triangle.va1].p = vertices[triangle.v1].p;
+                        triangle.v1 = triangle.va1;
+                    }
+                    if (triangle.va2 != triangle.v2)
+                    {
+                        vertices[triangle.va2].p = vertices[triangle.v2].p;
+                        triangle.v2 = triangle.va2;
+                    }
+
                     triangles[dst++] = triangle;
+
                     vertices[triangle.v0].tcount = 1;
                     vertices[triangle.v1].tcount = 1;
                     vertices[triangle.v2].tcount = 1;
                 }
             }
+
             this.triangles.Resize(dst);
             triangles = this.triangles.Data;
             triangleCount = dst;
@@ -830,6 +893,7 @@ namespace MeshDecimator.Algorithms
             var vertUV4D = (this.vertUV4D != null ? this.vertUV4D.Data : null);
             var vertColors = (this.vertColors != null ? this.vertColors.Data : null);
             var vertBoneWeights = (this.vertBoneWeights != null ? this.vertBoneWeights.Data : null);
+
             dst = 0;
             for (int i = 0; i < vertexCount; i++)
             {
@@ -883,6 +947,7 @@ namespace MeshDecimator.Algorithms
                     ++dst;
                 }
             }
+
             for (int i = 0; i < triangleCount; i++)
             {
                 var triangle = triangles[i];
