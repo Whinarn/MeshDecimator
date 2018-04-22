@@ -45,7 +45,7 @@ namespace MeshDecimator.Algorithms
         #endregion
 
         #region Fields
-        private bool keepBorders = false;
+        private bool preserveBorders = false;
         private int maxVertexCount = 0;
         private bool verbose = false;
 
@@ -56,10 +56,20 @@ namespace MeshDecimator.Algorithms
         /// <summary>
         /// Gets or sets if borders should be kept.
         /// </summary>
+        [Obsolete("Use the 'DecimationAlgorithm.PreserveBorders' property instead.", false)]
         public bool KeepBorders
         {
-            get { return keepBorders; }
-            set { keepBorders = value; }
+            get { return preserveBorders; }
+            set { preserveBorders = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets if borders should be preserved.
+        /// </summary>
+        public bool PreserveBorders
+        {
+            get { return preserveBorders; }
+            set { preserveBorders = value; }
         }
 
         /// <summary>
