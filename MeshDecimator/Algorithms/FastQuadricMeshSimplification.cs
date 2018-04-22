@@ -210,7 +210,7 @@ namespace MeshDecimator.Algorithms
 
         #region Private Methods
         #region Initialize Vertex Attribute
-        private ResizableArray<T> InitializeVertexAttribute<T>(T[] attributeValues)
+        private ResizableArray<T> InitializeVertexAttribute<T>(T[] attributeValues, string attributeName)
         {
             if (attributeValues != null && attributeValues.Length == vertices.Length)
             {
@@ -218,6 +218,10 @@ namespace MeshDecimator.Algorithms
                 var newArrayData = newArray.Data;
                 Array.Copy(attributeValues, 0, newArrayData, 0, attributeValues.Length);
                 return newArray;
+            }
+            else if (attributeValues != null && attributeValues.Length > 0)
+            {
+                Logging.LogError("Failed to set vertex attribute '{0}' with {1} length of array, when {2} was needed.", attributeName, attributeValues.Length, vertices.Length);
             }
             return null;
         }
@@ -859,21 +863,22 @@ namespace MeshDecimator.Algorithms
                 }
             }
 
-            vertNormals = InitializeVertexAttribute(meshNormals);
-            vertTangents = InitializeVertexAttribute(meshTangents);
-            vertColors = InitializeVertexAttribute(meshColors);
-            vertBoneWeights = InitializeVertexAttribute(meshBoneWeights);
+            vertNormals = InitializeVertexAttribute(meshNormals, "normals");
+            vertTangents = InitializeVertexAttribute(meshTangents, "tangents");
+            vertColors = InitializeVertexAttribute(meshColors, "colors");
+            vertBoneWeights = InitializeVertexAttribute(meshBoneWeights, "boneWeights");
 
             for (int i = 0; i < Mesh.UVChannelCount; i++)
             {
                 int uvDim = mesh.GetUVDimension(i);
+                string uvAttributeName = string.Format("uv{0}", i);
                 if (uvDim == 2)
                 {
                     if (vertUV4D == null)
                         vertUV2D = new UVChannels<Vector2>();
 
                     var uvs = mesh.GetUVs2D(i);
-                    vertUV2D[i] = InitializeVertexAttribute(uvs);
+                    vertUV2D[i] = InitializeVertexAttribute(uvs, uvAttributeName);
                 }
                 else if (uvDim == 3)
                 {
@@ -881,7 +886,7 @@ namespace MeshDecimator.Algorithms
                         vertUV3D = new UVChannels<Vector3>();
 
                     var uvs = mesh.GetUVs3D(i);
-                    vertUV3D[i] = InitializeVertexAttribute(uvs);
+                    vertUV3D[i] = InitializeVertexAttribute(uvs, uvAttributeName);
                 }
                 else if (uvDim == 4)
                 {
@@ -889,7 +894,8 @@ namespace MeshDecimator.Algorithms
                         vertUV4D = new UVChannels<Vector4>();
 
                     var uvs = mesh.GetUVs4D(i);
-                    vertUV4D[i] = InitializeVertexAttribute(uvs);
+
+                    vertUV4D[i] = InitializeVertexAttribute(uvs, uvAttributeName);
                 }
             }
         }
