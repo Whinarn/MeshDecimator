@@ -645,8 +645,8 @@ namespace MeshDecimator.Algorithms
             // Identify boundary : vertices[].border=0,1
             if (iteration == 0)
             {
-                List<int> vcount = new List<int>();
-                List<int> vids = new List<int>();
+                List<int> vcount = new List<int>(8);
+                List<int> vids = new List<int>(8);
                 for (int i = 0; i < vertexCount; i++)
                 {
                     vertices[i].border = false;
