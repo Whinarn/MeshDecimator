@@ -169,6 +169,8 @@ namespace MeshDecimator.Algorithms
             public int tcount;
             public SymmetricMatrix q;
             public bool border;
+            public bool seam;
+            public bool foldover;
 
             public Vertex(Vector3d p)
             {
@@ -177,6 +179,8 @@ namespace MeshDecimator.Algorithms
                 this.tcount = 0;
                 this.q = new SymmetricMatrix();
                 this.border = true;
+                this.seam = false;
+                this.foldover = false;
             }
         }
         #endregion
@@ -544,6 +548,46 @@ namespace MeshDecimator.Algorithms
         }
         #endregion
 
+        #region Are UVs The Same
+        private bool AreUVsTheSame(int channel, int indexA, int indexB)
+        {
+            if (vertUV2D != null)
+            {
+                var vertUV = vertUV2D[channel];
+                if (vertUV != null)
+                {
+                    var uvA = vertUV[indexA];
+                    var uvB = vertUV[indexB];
+                    return uvA == uvB;
+                }
+            }
+
+            if (vertUV3D != null)
+            {
+                var vertUV = vertUV3D[channel];
+                if (vertUV != null)
+                {
+                    var uvA = vertUV[indexA];
+                    var uvB = vertUV[indexB];
+                    return uvA == uvB;
+                }
+            }
+
+            if (vertUV4D != null)
+            {
+                var vertUV = vertUV4D[channel];
+                if (vertUV != null)
+                {
+                    var uvA = vertUV[indexA];
+                    var uvB = vertUV[indexB];
+                    return uvA == uvB;
+                }
+            }
+
+            return false;
+        }
+        #endregion
+
         #region Remove Vertex Pass
         /// <summary>
         /// Remove vertices and mark deleted triangles
@@ -584,6 +628,12 @@ namespace MeshDecimator.Algorithms
                     // Border check
                     if (v0.border != v1.border)
                         continue;
+                    // Seam check
+                    else if (v0.seam != v1.seam)
+                        continue;
+                    // Foldover check
+                    else if (v0.foldover != v1.foldover)
+                        continue;
                     // If borders should be preserved
                     else if (preserveBorders && v0.border)
                         continue;
@@ -617,6 +667,11 @@ namespace MeshDecimator.Algorithms
                         // Merge vertex attributes ia0 and ia1 into ia0
                         int ia1 = attributeIndexArr[k];
                         MergeVertexAttributes(ia0, ia1);
+                    }
+
+                    if (v0.seam)
+                    {
+                        ia0 = -1;
                     }
 
                     int tstart = refs.Length;
@@ -695,6 +750,8 @@ namespace MeshDecimator.Algorithms
                 for (int i = 0; i < vertexCount; i++)
                 {
                     vertices[i].border = false;
+                    vertices[i].seam = false;
+                    vertices[i].foldover = false;
                 }
 
                 int ofs;
@@ -780,6 +837,18 @@ namespace MeshDecimator.Algorithms
                             {
                                 borderIndices[j] = -1;
                                 vertices[myIndex].border = false;
+                                vertices[otherIndex].border = false;
+
+                                if (AreUVsTheSame(0, myIndex, otherIndex))
+                                {
+                                    vertices[myIndex].foldover = true;
+                                    vertices[otherIndex].foldover = true;
+                                }
+                                else
+                                {
+                                    vertices[myIndex].seam = true;
+                                    vertices[otherIndex].seam = true;
+                                }
 
                                 for (int k = 0; k < otherVertex.tcount; k++)
                                 {
