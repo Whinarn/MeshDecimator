@@ -201,6 +201,8 @@ namespace MeshDecimator.Algorithms
         #endregion
 
         #region Fields
+        private bool preserveSeams = false;
+        private bool preserveFoldovers = false;
         private bool enableSmartLink = true;
         private double agressiveness = 7.0;
         private double vertexLinkDistanceSqr = double.Epsilon;
@@ -226,6 +228,24 @@ namespace MeshDecimator.Algorithms
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets if seams should be preserved.
+        /// </summary>
+        public bool PreserveSeams
+        {
+            get { return preserveSeams; }
+            set { preserveSeams = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets if foldovers should be preserved.
+        /// </summary>
+        public bool PreserveFoldovers
+        {
+            get { return preserveFoldovers; }
+            set { preserveFoldovers = value; }
+        }
+
         /// <summary>
         /// Gets or sets if a feature for smarter vertex linking should be enabled, reducing artifacts in the
         /// decimated result at the cost of a slightly more expensive initialization by treating vertices at
@@ -636,6 +656,12 @@ namespace MeshDecimator.Algorithms
                         continue;
                     // If borders should be preserved
                     else if (preserveBorders && v0.border)
+                        continue;
+                    // If seams should be preserved
+                    else if (preserveSeams && v0.seam)
+                        continue;
+                    // If foldovers should be preserved
+                    else if (preserveFoldovers && v0.foldover)
                         continue;
 
                     // Compute vertex to collapse to
