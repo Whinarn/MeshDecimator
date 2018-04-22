@@ -425,7 +425,8 @@ namespace MeshDecimator.Algorithms
             int triangleCount = this.triangles.Length;
             var vertices = this.vertices.Data;
 
-            int maxVertexCount = this.maxVertexCount;
+            bool keepBorders = base.KeepBorders;
+            int maxVertexCount = base.MaxVertexCount;
             if (maxVertexCount <= 0)
                 maxVertexCount = int.MaxValue;
 
@@ -452,7 +453,7 @@ namespace MeshDecimator.Algorithms
                     if (v0.border != v1.border)
                         continue;
                     // If borders should be kept
-                    if (keepBorders && (v0.border || v1.border))
+                    else if (keepBorders && v0.border)
                         continue;
 
                     // Compute vertex to collapse to
@@ -912,7 +913,7 @@ namespace MeshDecimator.Algorithms
             int startTrisCount = triangleCount;
             var vertices = this.vertices.Data;
 
-            int maxVertexCount = this.maxVertexCount;
+            int maxVertexCount = base.MaxVertexCount;
             if (maxVertexCount <= 0)
                 maxVertexCount = int.MaxValue;
 
@@ -943,7 +944,7 @@ namespace MeshDecimator.Algorithms
                 // If it does not, try to adjust the 3 parameters
                 double threshold = 0.000000001 * System.Math.Pow(iteration + 3, agressiveness);
 
-                if (verbose && (iteration % 5) == 0)
+                if (Verbose && (iteration % 5) == 0)
                 {
                     Logging.LogVerbose("iteration {0} - triangles {1} threshold {2}", iteration, (startTrisCount - deletedTris), threshold);
                 }
@@ -993,7 +994,7 @@ namespace MeshDecimator.Algorithms
                 // If it does not, try to adjust the 3 parameters
                 double threshold = DoubleEpsilon;
 
-                if (verbose)
+                if (Verbose)
                 {
                     Logging.LogVerbose("Lossless iteration {0}", iteration);
                 }

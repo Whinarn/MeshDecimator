@@ -45,20 +45,9 @@ namespace MeshDecimator.Algorithms
         #endregion
 
         #region Fields
-        /// <summary>
-        /// If borders should be kept.
-        /// </summary>
-        protected bool keepBorders = false;
-
-        /// <summary>
-        /// The maximum vertex count, if any. Zero means no limitation is imposed.
-        /// </summary>
-        protected int maxVertexCount = 0;
-
-        /// <summary>
-        /// If verbose information should be printed in the console.
-        /// </summary>
-        protected bool verbose = false;
+        private bool keepBorders = false;
+        private int maxVertexCount = 0;
+        private bool verbose = false;
 
         private StatusReportCallback statusReportInvoker = null;
         #endregion
