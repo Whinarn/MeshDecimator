@@ -197,7 +197,7 @@ namespace MeshDecimator.Algorithms
         #endregion
 
         #region Fields
-        private bool preventHoles = true;
+        private bool enableSmartLink = true;
         private double agressiveness = 7.0;
         private double vertexLinkDistanceSqr = double.Epsilon;
 
@@ -223,12 +223,14 @@ namespace MeshDecimator.Algorithms
 
         #region Properties
         /// <summary>
-        /// Gets or sets if holes should be prevented as much as possible.
+        /// Gets or sets if a feature for smarter vertex linking should be enabled, reducing artifacts in the
+        /// decimated result at the cost of a slightly more expensive initialization by treating vertices at
+        /// the same position as the same vertex while separating the attributes.
         /// </summary>
-        public bool PreventHoles
+        public bool EnableSmartLink
         {
-            get { return preventHoles; }
-            set { preventHoles = value; }
+            get { return enableSmartLink; }
+            set { enableSmartLink = value; }
         }
 
         /// <summary>
@@ -603,6 +605,7 @@ namespace MeshDecimator.Algorithms
                     v0.p = p;
                     v0.q += v1.q;
                     vertices[i0] = v0;
+
                     if (pIndex == 1)
                     {
                         // Move vertex attributes from ia1 to ia0
@@ -744,7 +747,7 @@ namespace MeshDecimator.Algorithms
                     }
                 }
 
-                if (preventHoles)
+                if (enableSmartLink)
                 {
                     // First find all border vertices
                     var borderIndices = new int[borderVertexCount];
