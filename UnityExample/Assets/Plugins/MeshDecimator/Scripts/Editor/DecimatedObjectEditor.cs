@@ -26,6 +26,7 @@ SOFTWARE.
 
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using MeshDecimator.Unity;
 
 namespace MeshDecimator.UnityEditor
@@ -94,6 +95,7 @@ namespace MeshDecimator.UnityEditor
             generatedProp = serializedObject.FindProperty("generated");
             generatedProp.boolValue = true;
             isGeneratingNew = false;
+            EditorSceneManager.MarkSceneDirty(target.gameObject.scene);
         }
 
         private void ResetLODs()
@@ -102,6 +104,7 @@ namespace MeshDecimator.UnityEditor
             isGeneratingNew = true;
 
             target.ResetLODs();
+            EditorSceneManager.MarkSceneDirty(target.gameObject.scene);
         }
         #endregion
 
