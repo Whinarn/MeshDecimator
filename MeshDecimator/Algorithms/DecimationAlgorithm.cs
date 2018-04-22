@@ -51,11 +51,6 @@ namespace MeshDecimator.Algorithms
         protected bool keepBorders = false;
 
         /// <summary>
-        /// If linked vertices should be kept.
-        /// </summary>
-        protected bool keepLinkedVertices = false;
-
-        /// <summary>
         /// The maximum vertex count, if any. Zero means no limitation is imposed.
         /// </summary>
         protected int maxVertexCount = 0;
@@ -81,10 +76,11 @@ namespace MeshDecimator.Algorithms
         /// <summary>
         /// Gets or sets if linked vertices should be kept.
         /// </summary>
+        [Obsolete("This feature has been removed, for more details why please read the readme.", true)]
         public bool KeepLinkedVertices
         {
-            get { return keepLinkedVertices; }
-            set { keepLinkedVertices = value; }
+            get { return false; }
+            set { }
         }
 
         /// <summary>

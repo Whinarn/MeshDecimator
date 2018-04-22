@@ -136,7 +136,6 @@ namespace MeshDecimator.Algorithms
             public int tcount;
             public SymmetricMatrix q;
             public bool border;
-            public bool linked;
 
             public Vertex(Vector3d p)
             {
@@ -145,7 +144,6 @@ namespace MeshDecimator.Algorithms
                 this.tcount = 0;
                 this.q = new SymmetricMatrix();
                 this.border = true;
-                this.linked = false;
             }
         }
         #endregion
@@ -453,11 +451,6 @@ namespace MeshDecimator.Algorithms
                     // Border check
                     if (v0.border != v1.border)
                         continue;
-
-                    // Keep linked vertices
-                    if (keepLinkedVertices && (v0.linked || v1.linked))
-                        continue;
-
                     // If borders should be kept
                     if (keepBorders && (v0.border || v1.border))
                         continue;
@@ -846,39 +839,6 @@ namespace MeshDecimator.Algorithms
             for (int i = 0; i < meshVertices.Length; i++)
             {
                 vertArr[i] = new Vertex(meshVertices[i]);
-            }
-
-            if (keepLinkedVertices)
-            {
-                // Find links between vertices
-                // TODO: Is it possible to optimize this further?
-                int vertexCount = vertArr.Length;
-                for (int i = 0; i < vertexCount; i++)
-                {
-                    bool hasLinked = false;
-                    var p0 = meshVertices[i];
-                    for (int j = i + 1; j < vertexCount; j++)
-                    {
-                        if (hasLinked && vertArr[j].linked)
-                            continue;
-
-                        double xDiff = meshVertices[j].x - p0.x;
-                        if ((xDiff * xDiff) > Vector3d.Epsilon)
-                            continue;
-
-                        double yDiff = meshVertices[j].y - p0.y;
-                        if ((yDiff * yDiff) > Vector3d.Epsilon)
-                            continue;
-
-                        double zDiff = meshVertices[j].z - p0.z;
-                        if ((zDiff * zDiff) > Vector3d.Epsilon)
-                            continue;
-
-                        hasLinked = true;
-                        vertArr[i].linked = true;
-                        vertArr[j].linked = true;
-                    }
-                }
             }
 
             triangles.Resize(meshTriangleCount);
