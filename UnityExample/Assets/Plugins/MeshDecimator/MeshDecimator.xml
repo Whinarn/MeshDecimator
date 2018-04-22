@@ -9,9 +9,32 @@
             The fast quadric mesh simplification algorithm.
             </summary>
         </member>
+        <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.PreserveSeams">
+            <summary>
+            Gets or sets if seams should be preserved.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.PreserveFoldovers">
+            <summary>
+            Gets or sets if foldovers should be preserved.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.EnableSmartLink">
+            <summary>
+            Gets or sets if a feature for smarter vertex linking should be enabled, reducing artifacts in the
+            decimated result at the cost of a slightly more expensive initialization by treating vertices at
+            the same position as the same vertex while separating the attributes.
+            </summary>
+        </member>
         <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.Agressiveness">
             <summary>
             Gets or sets the agressiveness of this algorithm. Higher number equals higher quality, but more expensive to run.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.VertexLinkDistanceSqr">
+            <summary>
+            Gets or sets the maximum squared distance between two vertices in order to link them.
+            Note that this value is only used if PreventHoles is true.
             </summary>
         </member>
         <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.#ctor">
@@ -24,7 +47,7 @@
             Check if a triangle flips when this edge is removed
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.UpdateTriangles(System.Int32,MeshDecimator.Algorithms.FastQuadricMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.UpdateTriangles(System.Int32,System.Int32,MeshDecimator.Algorithms.FastQuadricMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean},System.Int32@)">
             <summary>
             Update triangle connections and edge error after a edge is collapsed.
             </summary>
@@ -82,29 +105,14 @@
             <param name="currentTris">The current count of triangles.</param>
             <param name="targetTris">The target count of triangles.</param>
         </member>
-        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.keepBorders">
-            <summary>
-            If borders should be kept.
-            </summary>
-        </member>
-        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.keepLinkedVertices">
-            <summary>
-            If linked vertices should be kept.
-            </summary>
-        </member>
-        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.maxVertexCount">
-            <summary>
-            The maximum vertex count, if any. Zero means no limitation is imposed.
-            </summary>
-        </member>
-        <member name="F:MeshDecimator.Algorithms.DecimationAlgorithm.verbose">
-            <summary>
-            If verbose information should be printed in the console.
-            </summary>
-        </member>
         <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.KeepBorders">
             <summary>
             Gets or sets if borders should be kept.
+            </summary>
+        </member>
+        <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.PreserveBorders">
+            <summary>
+            Gets or sets if borders should be preserved.
             </summary>
         </member>
         <member name="P:MeshDecimator.Algorithms.DecimationAlgorithm.KeepLinkedVertices">
