@@ -1192,7 +1192,7 @@ namespace MeshDecimator.Algorithms
                 string uvAttributeName = string.Format("uv{0}", i);
                 if (uvDim == 2)
                 {
-                    if (vertUV4D == null)
+                    if (vertUV2D == null)
                         vertUV2D = new UVChannels<Vector2>();
 
                     var uvs = mesh.GetUVs2D(i);
@@ -1212,7 +1212,6 @@ namespace MeshDecimator.Algorithms
                         vertUV4D = new UVChannels<Vector4>();
 
                     var uvs = mesh.GetUVs4D(i);
-
                     vertUV4D[i] = InitializeVertexAttribute(uvs, uvAttributeName);
                 }
             }
