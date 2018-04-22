@@ -3,6 +3,7 @@ A mesh decimation library for .NET and [Unity](https://unity3d.com/). The projec
 
 ## Compatibility
 This provided Unity Example project is currently compatible with Unity 2017.4.0f1
+
 This does not in any way limit the code to that specific Unity version however, but you might have to modify some Unity API usage.
 
 ## Installation into Unity
