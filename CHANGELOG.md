@@ -27,4 +27,4 @@
 - Support for static and skinned meshes.
 - Support for 2D, 3D and 4D UVs.
 
-[v0.2.0]: https://github.com/Whinarn/UnityMeshSimplifier/compare/v0.1.0...v0.2.0
+[v0.2.0]: https://github.com/Whinarn/MeshDecimator/compare/v0.1.0...v0.2.0
