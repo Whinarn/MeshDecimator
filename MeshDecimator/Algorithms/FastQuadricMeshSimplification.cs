@@ -231,6 +231,7 @@ namespace MeshDecimator.Algorithms
         #region Properties
         /// <summary>
         /// Gets or sets if seams should be preserved.
+        /// Default value: false
         /// </summary>
         public bool PreserveSeams
         {
@@ -240,6 +241,7 @@ namespace MeshDecimator.Algorithms
 
         /// <summary>
         /// Gets or sets if foldovers should be preserved.
+        /// Default value: false
         /// </summary>
         public bool PreserveFoldovers
         {
@@ -251,6 +253,7 @@ namespace MeshDecimator.Algorithms
         /// Gets or sets if a feature for smarter vertex linking should be enabled, reducing artifacts in the
         /// decimated result at the cost of a slightly more expensive initialization by treating vertices at
         /// the same position as the same vertex while separating the attributes.
+        /// Default value: true
         /// </summary>
         public bool EnableSmartLink
         {
@@ -271,6 +274,7 @@ namespace MeshDecimator.Algorithms
 
         /// <summary>
         /// Gets or sets the agressiveness of this algorithm. Higher number equals higher quality, but more expensive to run.
+        /// Default value: 7.0
         /// </summary>
         public double Agressiveness
         {
@@ -281,6 +285,7 @@ namespace MeshDecimator.Algorithms
         /// <summary>
         /// Gets or sets the maximum squared distance between two vertices in order to link them.
         /// Note that this value is only used if PreventHoles is true.
+        /// Default value: double.Epsilon
         /// </summary>
         public double VertexLinkDistanceSqr
         {

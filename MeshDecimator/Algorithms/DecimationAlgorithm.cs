@@ -55,6 +55,7 @@ namespace MeshDecimator.Algorithms
         #region Properties
         /// <summary>
         /// Gets or sets if borders should be kept.
+        /// Default value: false
         /// </summary>
         [Obsolete("Use the 'DecimationAlgorithm.PreserveBorders' property instead.", false)]
         public bool KeepBorders
@@ -65,6 +66,7 @@ namespace MeshDecimator.Algorithms
 
         /// <summary>
         /// Gets or sets if borders should be preserved.
+        /// Default value: false
         /// </summary>
         public bool PreserveBorders
         {
@@ -74,6 +76,7 @@ namespace MeshDecimator.Algorithms
 
         /// <summary>
         /// Gets or sets if linked vertices should be kept.
+        /// Default value: false
         /// </summary>
         [Obsolete("This feature has been removed, for more details why please read the readme.", true)]
         public bool KeepLinkedVertices
@@ -84,6 +87,7 @@ namespace MeshDecimator.Algorithms
 
         /// <summary>
         /// Gets or sets the maximum vertex count. Set to zero for no limitation.
+        /// Default value: 0 (no limitation)
         /// </summary>
         public int MaxVertexCount
         {
@@ -93,6 +97,7 @@ namespace MeshDecimator.Algorithms
 
         /// <summary>
         /// Gets or sets if verbose information should be printed in the console.
+        /// Default value: false
         /// </summary>
         public bool Verbose
         {
