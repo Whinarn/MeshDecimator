@@ -867,7 +867,7 @@ namespace MeshDecimator.Algorithms
                             var otherVertex = vertices[otherIndex];
                             if ((myVertex.p - otherVertex.p).MagnitudeSqr <= vertexLinkDistanceSqr)
                             {
-                                borderIndices[j] = -1;
+                                borderIndices[j] = -1; // NOTE: This makes sure that the "other" vertex is not processed again
                                 vertices[myIndex].border = false;
                                 vertices[otherIndex].border = false;
 
