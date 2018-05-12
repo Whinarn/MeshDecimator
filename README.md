@@ -6,6 +6,11 @@ This provided Unity Example project is currently compatible with Unity 2018.1.0f
 
 This does not in any way limit the code to that specific Unity version however, but you might have to modify some Unity API usage.
 
+## Prerequisites
+The following must be installed before this repository can be properly cloned:
+
+- [git-lfs](https://git-lfs.github.com/)
+
 ## Installation into Unity
 After building the project, copy over *MeshDecimator.dll* and *MeshDecimator.xml* into your Unity project, anywhere within your Assets directory (for example *Assets/MeshDecimator*).
 It is strongly recommended to build the C# project over copying the binaries found in the Unity Example project.
