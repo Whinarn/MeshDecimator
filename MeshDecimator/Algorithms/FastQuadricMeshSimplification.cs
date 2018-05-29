@@ -1406,7 +1406,7 @@ namespace MeshDecimator.Algorithms
                 {
                     for (int j = lastSubMeshOffset + 1; j < triangle.subMeshIndex; j++)
                     {
-                        subMeshOffsets[j] = i - 1;
+                        subMeshOffsets[j] = i;
                     }
                     subMeshOffsets[triangle.subMeshIndex] = i;
                     lastSubMeshOffset = triangle.subMeshIndex;
@@ -1421,11 +1421,12 @@ namespace MeshDecimator.Algorithms
             for (int subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
             {
                 int startOffset = subMeshOffsets[subMeshIndex];
-                int endOffset = ((subMeshIndex + 1) < subMeshCount ? subMeshOffsets[subMeshIndex + 1] : triangleCount) - 1;
-                int subMeshTriangleCount = endOffset - startOffset + 1;
+                int endOffset = ((subMeshIndex + 1) < subMeshCount ? subMeshOffsets[subMeshIndex + 1] : triangleCount);
+                int subMeshTriangleCount = endOffset - startOffset;
                 if (subMeshTriangleCount < 0) subMeshTriangleCount = 0;
                 int[] subMeshIndices = new int[subMeshTriangleCount * 3];
-                for (int triangleIndex = startOffset; triangleIndex <= endOffset; triangleIndex++)
+
+                for (int triangleIndex = startOffset; triangleIndex < endOffset; triangleIndex++)
                 {
                     var triangle = triArr[triangleIndex];
                     int offset = (triangleIndex - startOffset) * 3;
