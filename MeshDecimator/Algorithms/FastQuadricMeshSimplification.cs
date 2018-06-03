@@ -799,8 +799,8 @@ namespace MeshDecimator.Algorithms
             {
                 var refs = this.refs.Data;
 
-                List<int> vcount = new List<int>(8);
-                List<int> vids = new List<int>(8);
+                var vcount = new List<int>(8);
+                var vids = new List<int>(8);
                 int vsize = 0;
                 for (int i = 0; i < vertexCount; i++)
                 {
