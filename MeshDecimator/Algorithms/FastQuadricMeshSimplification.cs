@@ -1421,21 +1421,29 @@ namespace MeshDecimator.Algorithms
             for (int subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
             {
                 int startOffset = subMeshOffsets[subMeshIndex];
-                int endOffset = ((subMeshIndex + 1) < subMeshCount ? subMeshOffsets[subMeshIndex + 1] : triangleCount);
-                int subMeshTriangleCount = endOffset - startOffset;
-                if (subMeshTriangleCount < 0) subMeshTriangleCount = 0;
-                int[] subMeshIndices = new int[subMeshTriangleCount * 3];
-
-                for (int triangleIndex = startOffset; triangleIndex < endOffset; triangleIndex++)
+                if (startOffset < triangleCount)
                 {
-                    var triangle = triArr[triangleIndex];
-                    int offset = (triangleIndex - startOffset) * 3;
-                    subMeshIndices[offset] = triangle.v0;
-                    subMeshIndices[offset + 1] = triangle.v1;
-                    subMeshIndices[offset + 2] = triangle.v2;
-                }
+                    int endOffset = ((subMeshIndex + 1) < subMeshCount ? subMeshOffsets[subMeshIndex + 1] : triangleCount);
+                    int subMeshTriangleCount = endOffset - startOffset;
+                    if (subMeshTriangleCount < 0) subMeshTriangleCount = 0;
+                    int[] subMeshIndices = new int[subMeshTriangleCount * 3];
 
-                indices[subMeshIndex] = subMeshIndices;
+                    for (int triangleIndex = startOffset; triangleIndex < endOffset; triangleIndex++)
+                    {
+                        var triangle = triArr[triangleIndex];
+                        int offset = (triangleIndex - startOffset) * 3;
+                        subMeshIndices[offset] = triangle.v0;
+                        subMeshIndices[offset + 1] = triangle.v1;
+                        subMeshIndices[offset + 2] = triangle.v2;
+                    }
+
+                    indices[subMeshIndex] = subMeshIndices;
+                }
+                else
+                {
+                    // This mesh doesn't have any triangles left
+                    indices[subMeshIndex] = new int[0];
+                }
             }
 
             Mesh newMesh = new Mesh(vertices, indices);
