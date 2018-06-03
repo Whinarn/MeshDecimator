@@ -86,7 +86,7 @@ namespace MeshDecimator.Math
         /// <returns>The minimum value.</returns>
         public static int Min(int val1, int val2, int val3)
         {
-            return (val1 < val2 ? (val1 < val3 ? val1 : (val2 < val3 ? val2 : val3)) : (val2 < val3 ? val2 : val3));
+            return (val1 < val2 ? (val1 < val3 ? val1 : val3) : (val2 < val3 ? val2 : val3));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace MeshDecimator.Math
         /// <returns>The minimum value.</returns>
         public static float Min(float val1, float val2, float val3)
         {
-            return (val1 < val2 ? (val1 < val3 ? val1 : (val2 < val3 ? val2 : val3)) : (val2 < val3 ? val2 : val3));
+            return (val1 < val2 ? (val1 < val3 ? val1 : val3) : (val2 < val3 ? val2 : val3));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace MeshDecimator.Math
         /// <returns>The minimum value.</returns>
         public static double Min(double val1, double val2, double val3)
         {
-            return (val1 < val2 ? (val1 < val3 ? val1 : (val2 < val3 ? val2 : val3)) : (val2 < val3 ? val2 : val3));
+            return (val1 < val2 ? (val1 < val3 ? val1 : val3) : (val2 < val3 ? val2 : val3));
         }
         #endregion
 
@@ -157,7 +157,7 @@ namespace MeshDecimator.Math
         /// <returns>The maximum value.</returns>
         public static int Max(int val1, int val2, int val3)
         {
-            return (val1 > val2 ? (val1 > val3 ? val1 : (val2 > val3 ? val2 : val3)) : (val2 > val3 ? val2 : val3));
+            return (val1 > val2 ? (val1 > val3 ? val1 : val3) : (val2 > val3 ? val2 : val3));
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace MeshDecimator.Math
         /// <returns>The maximum value.</returns>
         public static float Max(float val1, float val2, float val3)
         {
-            return (val1 > val2 ? (val1 > val3 ? val1 : (val2 > val3 ? val2 : val3)) : (val2 > val3 ? val2 : val3));
+            return (val1 > val2 ? (val1 > val3 ? val1 : val3) : (val2 > val3 ? val2 : val3));
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace MeshDecimator.Math
         /// <returns>The maximum value.</returns>
         public static double Max(double val1, double val2, double val3)
         {
-            return (val1 > val2 ? (val1 > val3 ? val1 : (val2 > val3 ? val2 : val3)) : (val2 > val3 ? val2 : val3));
+            return (val1 > val2 ? (val1 > val3 ? val1 : val3) : (val2 > val3 ? val2 : val3));
         }
         #endregion
 
