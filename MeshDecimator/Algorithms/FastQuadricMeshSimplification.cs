@@ -1395,7 +1395,7 @@ namespace MeshDecimator.Algorithms
                 vertices[i] = vertArr[i].p;
             }
 
-            // First get the sub-mesh offse-ts
+            // First get the sub-mesh offsets
             var triArr = this.triangles.Data;
             int[] subMeshOffsets = new int[subMeshCount];
             int lastSubMeshOffset = -1;
