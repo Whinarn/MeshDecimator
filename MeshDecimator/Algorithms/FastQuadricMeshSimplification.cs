@@ -388,7 +388,7 @@ namespace MeshDecimator.Algorithms
         /// <summary>
         /// Check if a triangle flips when this edge is removed
         /// </summary>
-        private bool Flipped(Vector3d p, int i0, int i1, ref Vertex v0, ResizableArray<bool> deleted)
+        private bool Flipped(ref Vector3d p, int i0, int i1, ref Vertex v0, bool[] deleted)
         {
             int tcount = v0.tcount;
             var refs = this.refs.Data;
@@ -397,13 +397,12 @@ namespace MeshDecimator.Algorithms
             for (int k = 0; k < tcount; k++)
             {
                 Ref r = refs[v0.tstart + k];
-                Triangle t = triangles[r.tid];
-                if (t.deleted)
+                if (triangles[r.tid].deleted)
                     continue;
 
                 int s = r.tvertex;
-                int id1 = t[(s + 1) % 3];
-                int id2 = t[(s + 2) % 3];
+                int id1 = triangles[r.tid][(s + 1) % 3];
+                int id2 = triangles[r.tid][(s + 2) % 3];
                 if (id1 == i1 || id2 == i1)
                 {
                     deleted[k] = true;
@@ -422,7 +421,7 @@ namespace MeshDecimator.Algorithms
                 Vector3d.Cross(ref d1, ref d2, out n);
                 n.Normalize();
                 deleted[k] = false;
-                dot = Vector3d.Dot(ref n, ref t.n);
+                dot = Vector3d.Dot(ref n, ref triangles[r.tid].n);
                 if (dot < 0.2)
                     return true;
             }
@@ -690,9 +689,9 @@ namespace MeshDecimator.Algorithms
                     deleted1.Resize(v1.tcount); // normals temporarily
 
                     // Don't remove if flipped
-                    if (Flipped(p, i0, i1, ref v0, deleted0))
-                        continue;
-                    if (Flipped(p, i1, i0, ref v1, deleted1))
+                    if (Flipped(ref p, i0, i1, ref v0, deleted0.Data))
+                            continue;
+                    if (Flipped(ref p, i1, i0, ref v1, deleted1.Data))
                         continue;
 
                     int ia0 = attributeIndexArr[j];
