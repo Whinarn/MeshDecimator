@@ -67,8 +67,6 @@ namespace MeshDecimator.Algorithms
             public int va1;
             public int va2;
 
-            //public double area;
-
             public double err0;
             public double err1;
             public double err2;
@@ -118,7 +116,6 @@ namespace MeshDecimator.Algorithms
                 this.va1 = v1;
                 this.va2 = v2;
 
-                //area = 0;
                 err0 = err1 = err2 = err3 = 0;
                 deleted = dirty = false;
                 n = new Vector3d();
@@ -427,14 +424,6 @@ namespace MeshDecimator.Algorithms
             }
 
             return false;
-        }
-        #endregion
-
-        #region Calculate Area
-        private double CalculateArea(int i0, int i1, int i2)
-        {
-            var vertices = this.vertices.Data;
-            return MathHelper.TriangleArea(ref vertices[i0].p, ref vertices[i1].p, ref vertices[i2].p);
         }
         #endregion
 
