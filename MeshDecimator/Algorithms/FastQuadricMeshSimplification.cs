@@ -793,6 +793,7 @@ namespace MeshDecimator.Algorithms
 
                 List<int> vcount = new List<int>(8);
                 List<int> vids = new List<int>(8);
+                int vsize = 0;
                 for (int i = 0; i < vertexCount; i++)
                 {
                     vertices[i].border = false;
@@ -805,20 +806,20 @@ namespace MeshDecimator.Algorithms
                 int borderVertexCount = 0;
                 for (int i = 0; i < vertexCount; i++)
                 {
-                    var vertex = vertices[i];
+                    int tstart = vertices[i].tstart;
+                    int tcount = vertices[i].tcount;
                     vcount.Clear();
                     vids.Clear();
+                    vsize = 0;
 
-                    int tcount = vertex.tcount;
                     for (int j = 0; j < tcount; j++)
                     {
-                        int k = refs[vertex.tstart + j].tid;
-                        Triangle t = triangles[k];
-                        for (k = 0; k < 3; k++)
+                        int tid = refs[tstart + j].tid;
+                        for (int k = 0; k < 3; k++)
                         {
                             ofs = 0;
-                            id = t[k];
-                            while (ofs < vcount.Count)
+                            id = triangles[tid][k];
+                            while (ofs < vsize)
                             {
                                 if (vids[ofs] == id)
                                     break;
@@ -826,10 +827,11 @@ namespace MeshDecimator.Algorithms
                                 ++ofs;
                             }
 
-                            if (ofs == vcount.Count)
+                            if (ofs == vsize)
                             {
                                 vcount.Add(1);
                                 vids.Add(id);
+                                ++vsize;
                             }
                             else
                             {
@@ -838,8 +840,7 @@ namespace MeshDecimator.Algorithms
                         }
                     }
 
-                    int vcountCount = vcount.Count;
-                    for (int j = 0; j < vcountCount; j++)
+                    for (int j = 0; j < vsize; j++)
                     {
                         if (vcount[j] == 1)
                         {
