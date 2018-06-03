@@ -1,5 +1,10 @@
 # Change Log
 
+## [v0.2.1] - 2018-06-03
+
+### Fixed
+- Heavily optimized the initialization and simplification process for the fast quadric mesh simplification algorithm.
+
 ## [v0.2.0] - 2018-05-12
 
 ### Added
@@ -27,4 +32,5 @@
 - Support for static and skinned meshes.
 - Support for 2D, 3D and 4D UVs.
 
+[v0.2.1]: https://github.com/Whinarn/MeshDecimator/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/Whinarn/MeshDecimator/compare/v0.1.0...v0.2.0
