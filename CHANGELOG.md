@@ -1,4 +1,4 @@
-# Changelog
+# Change Log
 
 ## [v0.2.0] - 2018-05-12
 
