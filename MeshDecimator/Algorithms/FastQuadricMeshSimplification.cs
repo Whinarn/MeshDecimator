@@ -195,6 +195,32 @@ namespace MeshDecimator.Algorithms
             }
         }
         #endregion
+
+        #region Border Vertex
+        private struct BorderVertex
+        {
+            public int index;
+            public int hash;
+
+            public BorderVertex(int index, int hash)
+            {
+                this.index = index;
+                this.hash = hash;
+            }
+        }
+        #endregion
+
+        #region Border Vertex Comparer
+        private class BorderVertexComparer : IComparer<BorderVertex>
+        {
+            public static readonly BorderVertexComparer instance = new BorderVertexComparer();
+
+            public int Compare(BorderVertex x, BorderVertex y)
+            {
+                return x.hash.CompareTo(y.hash);
+            }
+        }
+        #endregion
         #endregion
 
         #region Fields
@@ -786,6 +812,8 @@ namespace MeshDecimator.Algorithms
                 int ofs;
                 int id;
                 int borderVertexCount = 0;
+                double borderMinX = double.MaxValue;
+                double borderMaxX = double.MinValue;
                 for (int i = 0; i < vertexCount; i++)
                 {
                     int tstart = vertices[i].tstart;
@@ -829,6 +857,18 @@ namespace MeshDecimator.Algorithms
                             id = vids[j];
                             vertices[id].border = true;
                             ++borderVertexCount;
+
+                            if (enableSmartLink)
+                            {
+                                if (vertices[id].p.x < borderMinX)
+                                {
+                                    borderMinX = vertices[id].p.x;
+                                }
+                                if (vertices[id].p.x > borderMaxX)
+                                {
+                                    borderMaxX = vertices[id].p.x;
+                                }
+                            }
                         }
                     }
                 }
@@ -836,42 +876,47 @@ namespace MeshDecimator.Algorithms
                 if (enableSmartLink)
                 {
                     // First find all border vertices
-                    var borderIndices = new int[borderVertexCount];
+                    var borderVertices = new BorderVertex[borderVertexCount];
                     int borderIndexCount = 0;
+                    double borderAreaWidth = borderMaxX - borderMinX;
                     for (int i = 0; i < vertexCount; i++)
                     {
                         if (vertices[i].border)
                         {
-                            borderIndices[borderIndexCount++] = i;
+                            int vertexHash = (int)((((vertices[i].p.x - borderMinX) / borderAreaWidth) - 0.5) * int.MaxValue);
+                            borderVertices[borderIndexCount] = new BorderVertex(i, vertexHash);
+                            ++borderIndexCount;
                         }
                     }
+
+                    // Sort the border vertices by hash
+                    Array.Sort(borderVertices, 0, borderIndexCount, BorderVertexComparer.instance);
 
                     // Then find identical border vertices and bind them together as one
                     for (int i = 0; i < borderIndexCount; i++)
                     {
-                        var myIndex = borderIndices[i];
+                        int myIndex = borderVertices[i].index;
                         if (myIndex == -1)
                             continue;
 
                         var myPoint = vertices[myIndex].p;
                         for (int j = i + 1; j < borderIndexCount; j++)
                         {
-                            var otherIndex = borderIndices[j];
+                            int otherIndex = borderVertices[j].index;
                             if (otherIndex == -1)
                                 continue;
+                            else if ((borderVertices[j].hash - borderVertices[i].hash) > 1) // There is no point to continue beyond this point
+                                break;
 
                             var otherPoint = vertices[otherIndex].p;
                             var sqrX = ((myPoint.x - otherPoint.x) * (myPoint.x - otherPoint.x));
-                            if (sqrX > vertexLinkDistanceSqr)
-                                continue;
-
                             var sqrY = ((myPoint.y - otherPoint.y) * (myPoint.y - otherPoint.y));
                             var sqrZ = ((myPoint.z - otherPoint.z) * (myPoint.z - otherPoint.z));
                             var sqrMagnitude = sqrX + sqrY + sqrZ;
 
                             if (sqrMagnitude <= vertexLinkDistanceSqr)
                             {
-                                borderIndices[j] = -1; // NOTE: This makes sure that the "other" vertex is not processed again
+                                borderVertices[j].index = -1; // NOTE: This makes sure that the "other" vertex is not processed again
                                 vertices[myIndex].border = false;
                                 vertices[otherIndex].border = false;
 
