@@ -525,7 +525,23 @@ namespace MeshDecimator.Unity
             var newColors = FromSimplifyColor(destMesh.Colors);
             var newBoneWeights = FromSimplifyBoneWeights(destMesh.BoneWeights);
 
+            int maxIndex = 0;
+            for (int i = 0; i < subMeshCount; i++)
+            {
+                var subMeshIndices = destMesh.GetIndices(i);
+                for (int j = 0; j < subMeshIndices.Length; j++)
+                {
+                    if (subMeshIndices[j] > maxIndex)
+                    {
+                        maxIndex = subMeshIndices[j];
+                    }
+                }
+            }
+
             UMesh newMesh = new UMesh();
+#if UNITY_2017_3 || !UNITY_2017_4 || UNITY_2018
+            newMesh.indexFormat = (maxIndex > ushort.MaxValue ? UnityEngine.Rendering.IndexFormat.UInt32 : UnityEngine.Rendering.IndexFormat.UInt16);
+#endif
             if (bindposes != null) newMesh.bindposes = bindposes;
             newMesh.subMeshCount = subMeshCount;
             newMesh.vertices = vertices;
@@ -627,7 +643,9 @@ namespace MeshDecimator.Unity
             }
 
             var algorithm = MeshDecimation.CreateAlgorithm(Algorithm.Default);
+#if !UNITY_2017_3 && !UNITY_2017_4 && !UNITY_2018
             algorithm.MaxVertexCount = ushort.MaxValue;
+#endif
             if (statusCallback != null)
             {
                 algorithm.StatusReport += statusCallback;
@@ -815,6 +833,8 @@ namespace MeshDecimator.Unity
                 {
                     var subMeshMaterial = meshMaterials[subMeshIndex];
                     int[] subMeshIndices = mesh.GetTriangles(subMeshIndex);
+                    totalTriangleCount += subMeshIndices.Length / 3;
+
                     if (currentVertexCount > 0)
                     {
                         for (int i = 0; i < subMeshIndices.Length; i++)
@@ -822,7 +842,6 @@ namespace MeshDecimator.Unity
                             subMeshIndices[i] += currentVertexCount;
                         }
                     }
-                    totalTriangleCount += subMeshIndices.Length / 3;
 
                     int mergeWithIndex;
                     if (materialMap.TryGetValue(subMeshMaterial, out mergeWithIndex))
@@ -832,12 +851,13 @@ namespace MeshDecimator.Unity
                     }
                     else
                     {
-                        materialMap.Add(subMeshMaterial, indices.Count);
+                        int materialIndex = indices.Count;
+                        materialMap.Add(subMeshMaterial, materialIndex);
                         usedMaterials.Add(subMeshMaterial);
                         indices.Add(subMeshIndices);
                     }
                 }
-                currentVertexCount += meshVertices.Length;
+                currentVertexCount += meshVertexCount;
             }
 
             quality = UMath.Clamp01(quality);
@@ -878,7 +898,9 @@ namespace MeshDecimator.Unity
             }
 
             var algorithm = MeshDecimation.CreateAlgorithm(Algorithm.Default);
+#if !UNITY_2017_3 && !UNITY_2017_4 && !UNITY_2018
             algorithm.MaxVertexCount = ushort.MaxValue;
+#endif
             if (statusCallback != null)
             {
                 algorithm.StatusReport += statusCallback;
