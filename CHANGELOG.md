@@ -1,9 +1,11 @@
 # Change Log
 
-## [v0.2.1] - 2018-06-03
+## [v0.2.1] - 2018-07-05
 
 ### Fixed
 - Heavily optimized the initialization and simplification process for the fast quadric mesh simplification algorithm.
+- Removed the maximum vertex count limit for over Unity 2017.3 in the Unity example.
+- Added support to specify if meshes should be combined when creating LOD levels in the Unity example.
 
 ## [v0.2.0] - 2018-05-12
 
