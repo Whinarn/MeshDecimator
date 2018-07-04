@@ -26,6 +26,7 @@ SOFTWARE.
 
 using UnityEngine;
 using UnityEngine.Rendering;
+using System.Linq;
 using MeshDecimator.Algorithms;
 
 namespace MeshDecimator.Unity
@@ -57,6 +58,10 @@ namespace MeshDecimator.Unity
         /// </summary>
         [Range(0.01f, 1f)]
         public float quality;
+        /// <summary>
+        /// If the meshes should be combined into one.
+        /// </summary>
+        public bool combineMeshes;
         /// <summary>
         /// The LOD level skin quality.
         /// </summary>
@@ -96,6 +101,7 @@ namespace MeshDecimator.Unity
         public LODSettings(float quality)
         {
             this.quality = quality;
+            this.combineMeshes = true;
             this.skinQuality = SkinQuality.Auto;
             this.receiveShadows = true;
             this.shadowCasting = ShadowCastingMode.On;
@@ -114,6 +120,7 @@ namespace MeshDecimator.Unity
         public LODSettings(float quality, SkinQuality skinQuality)
         {
             this.quality = quality;
+            this.combineMeshes = true;
             this.skinQuality = skinQuality;
             this.receiveShadows = true;
             this.shadowCasting = ShadowCastingMode.On;
@@ -134,6 +141,7 @@ namespace MeshDecimator.Unity
         public LODSettings(float quality, SkinQuality skinQuality, bool receiveShadows, ShadowCastingMode shadowCasting)
         {
             this.quality = quality;
+            this.combineMeshes = true;
             this.skinQuality = skinQuality;
             this.receiveShadows = receiveShadows;
             this.shadowCasting = shadowCasting;
@@ -156,6 +164,7 @@ namespace MeshDecimator.Unity
         public LODSettings(float quality, SkinQuality skinQuality, bool receiveShadows, ShadowCastingMode shadowCasting, MotionVectorGenerationMode motionVectors, bool skinnedMotionVectors)
         {
             this.quality = quality;
+            this.combineMeshes = true;
             this.skinQuality = skinQuality;
             this.receiveShadows = receiveShadows;
             this.shadowCasting = shadowCasting;
@@ -191,17 +200,21 @@ namespace MeshDecimator.Unity
         #endregion
 
         #region Generate Static LOD
+        private static Mesh GenerateStaticLOD(Transform transform, MeshRenderer renderer, float quality, out Material[] materials, DecimationAlgorithm.StatusReportCallback statusCallback)
+        {
+            var rendererTransform = renderer.transform;
+            var meshFilter = renderer.GetComponent<MeshFilter>();
+            var mesh = meshFilter.sharedMesh;
+            var meshTransform = transform.worldToLocalMatrix * rendererTransform.localToWorldMatrix;
+            materials = renderer.sharedMaterials;
+            return MeshDecimatorUtility.DecimateMesh(mesh, meshTransform, quality, false, statusCallback);
+        }
+
         private static Mesh GenerateStaticLOD(Transform transform, MeshRenderer[] renderers, float quality, out Material[] materials, DecimationAlgorithm.StatusReportCallback statusCallback)
         {
             if (renderers.Length == 1)
             {
-                var renderer = renderers[0];
-                var rendererTransform = renderer.transform;
-                var meshFilter = renderer.GetComponent<MeshFilter>();
-                var mesh = meshFilter.sharedMesh;
-                var meshTransform = transform.worldToLocalMatrix * rendererTransform.localToWorldMatrix;
-                materials = renderer.sharedMaterials;
-                return MeshDecimatorUtility.DecimateMesh(mesh, meshTransform, quality, false, statusCallback);
+                return GenerateStaticLOD(transform, renderers[0], quality, out materials, statusCallback);
             }
             else
             {
@@ -223,17 +236,21 @@ namespace MeshDecimator.Unity
         #endregion
 
         #region Generate Skinned LOD
+        private static Mesh GenerateSkinnedLOD(Transform transform, SkinnedMeshRenderer renderer, float quality, out Material[] materials, out Transform[] mergedBones, DecimationAlgorithm.StatusReportCallback statusCallback)
+        {
+            var rendererTransform = renderer.transform;
+            var mesh = renderer.sharedMesh;
+            var meshTransform = transform.worldToLocalMatrix * rendererTransform.localToWorldMatrix;
+            materials = renderer.sharedMaterials;
+            mergedBones = renderer.bones;
+            return MeshDecimatorUtility.DecimateMesh(mesh, meshTransform, quality, false, statusCallback);
+        }
+
         private static Mesh GenerateSkinnedLOD(Transform transform, SkinnedMeshRenderer[] renderers, float quality, out Material[] materials, out Transform[] mergedBones, DecimationAlgorithm.StatusReportCallback statusCallback)
         {
             if (renderers.Length == 1)
             {
-                var renderer = renderers[0];
-                var rendererTransform = renderer.transform;
-                var mesh = renderer.sharedMesh;
-                var meshTransform = transform.worldToLocalMatrix * rendererTransform.localToWorldMatrix;
-                materials = renderer.sharedMaterials;
-                mergedBones = renderer.bones;
-                return MeshDecimatorUtility.DecimateMesh(mesh, meshTransform, quality, false, statusCallback);
+                return GenerateSkinnedLOD(transform, renderers[0], quality, out materials, out mergedBones, statusCallback);
             }
             else
             {
@@ -334,12 +351,12 @@ namespace MeshDecimator.Unity
             screenRelativeTransitionHeight *= 0.5f;
 
             float minimumQuality = 1f;
-            for (int i = 0; i < levels.Length; i++)
+            for (int levelIndex = 0; levelIndex < levels.Length; levelIndex++)
             {
-                var level = levels[i];
+                var level = levels[levelIndex];
                 float quality = Mathf.Clamp(level.quality, 0.01f, minimumQuality);
                 screenRelativeTransitionHeight *= quality * quality;
-                GameObject lodObj = new GameObject(string.Format("Level{0}", i));
+                GameObject lodObj = new GameObject(string.Format("Level{0}", levelIndex));
                 var lodParent = lodObj.transform;
                 lodParent.parent = lodsParent;
                 lodParent.localPosition = Vector3.zero;
@@ -351,87 +368,140 @@ namespace MeshDecimator.Unity
                 {
                     levelStatusCallback = (iteration, originalTris, currentTris, targetTris) =>
                     {
-                        statusCallback.Invoke(i, iteration, originalTris, currentTris, targetTris);
+                        statusCallback.Invoke(levelIndex, iteration, originalTris, currentTris, targetTris);
                     };
                 }
 
-                Renderer[] lodRenderers = null;
-                if (skinnedRenderers.Length == 0)
+                GameObject staticLodObj = lodObj;
+                GameObject skinnedLodObj = lodObj;
+                Transform staticLodParent = lodParent;
+                Transform skinnedLodParent = lodParent;
+                if (meshRenderers.Length > 0 && skinnedRenderers.Length > 0)
                 {
-                    Material[] materials;
-                    Mesh lodMesh = GenerateStaticLOD(transform, meshRenderers, quality, out materials, levelStatusCallback);
-                    lodMesh.name = string.Format("{0}_static{1}", gameObj.name, i);
-                    var meshFilter = lodObj.AddComponent<MeshFilter>();
-                    meshFilter.sharedMesh = lodMesh;
-                    var lodRenderer = lodObj.AddComponent<MeshRenderer>();
-                    lodRenderer.sharedMaterials = materials;
-                    SetupLODRenderer(lodRenderer, level);
-                    lodRenderers = new Renderer[] { lodRenderer };
-                }
-                else if (meshRenderers.Length == 0)
-                {
-                    Transform[] bones;
-                    Material[] materials;
-                    Mesh lodMesh = GenerateSkinnedLOD(transform, skinnedRenderers, quality, out materials, out bones, levelStatusCallback);
-                    lodMesh.name = string.Format("{0}_skinned{1}", gameObj.name, i);
-                    Transform rootBone = FindRootBone(transform, bones);
+                    staticLodObj = new GameObject("Static", typeof(MeshFilter), typeof(MeshRenderer));
+                    staticLodParent = staticLodObj.transform;
+                    staticLodParent.parent = lodParent;
+                    staticLodParent.localPosition = Vector3.zero;
+                    staticLodParent.localRotation = Quaternion.identity;
+                    staticLodParent.localScale = Vector3.one;
 
-                    var lodRenderer = lodObj.AddComponent<SkinnedMeshRenderer>();
-                    lodRenderer.sharedMesh = lodMesh;
-                    lodRenderer.sharedMaterials = materials;
-                    lodRenderer.rootBone = rootBone;
-                    lodRenderer.bones = bones;
-                    SetupLODRenderer(lodRenderer, level);
-                    lodRenderers = new Renderer[] { lodRenderer };
+                    skinnedLodObj = new GameObject("Skinned", typeof(SkinnedMeshRenderer));
+                    skinnedLodParent = skinnedLodObj.transform;
+                    skinnedLodParent.parent = lodParent;
+                    skinnedLodParent.localPosition = Vector3.zero;
+                    skinnedLodParent.localRotation = Quaternion.identity;
+                    skinnedLodParent.localScale = Vector3.one;
                 }
-                else
+
+                Renderer[] staticLodRenderers = null;
+                Renderer[] skinnedLodRenderers = null;
+                if (meshRenderers.Length > 0)
                 {
-                    MeshRenderer lodMeshRenderer = null;
-                    SkinnedMeshRenderer lodSkinnedRenderer = null;
+                    if (level.combineMeshes)
                     {
                         Material[] materials;
                         Mesh lodMesh = GenerateStaticLOD(transform, meshRenderers, quality, out materials, levelStatusCallback);
-                        lodMesh.name = string.Format("{0}_static{1}", gameObj.name, i);
-                        GameObject staticObj = new GameObject("Static", typeof(MeshFilter), typeof(MeshRenderer));
-                        staticObj.transform.parent = lodParent;
-                        staticObj.transform.localPosition = Vector3.zero;
-                        staticObj.transform.localRotation = Quaternion.identity;
-                        staticObj.transform.localScale = Vector3.one;
-
-                        var meshFilter = staticObj.GetComponent<MeshFilter>();
+                        lodMesh.name = string.Format("{0}_static{1}", gameObj.name, levelIndex);
+                        var meshFilter = staticLodObj.AddComponent<MeshFilter>();
                         meshFilter.sharedMesh = lodMesh;
-                        var lodRenderer = staticObj.GetComponent<MeshRenderer>();
+                        var lodRenderer = staticLodObj.AddComponent<MeshRenderer>();
                         lodRenderer.sharedMaterials = materials;
                         SetupLODRenderer(lodRenderer, level);
-                        lodMeshRenderer = lodRenderer;
+                        staticLodRenderers = new Renderer[] { lodRenderer };
                     }
+                    else
+                    {
+                        staticLodRenderers = new Renderer[meshRenderers.Length];
+
+                        Material[] materials;
+                        for (int rendererIndex = 0; rendererIndex < meshRenderers.Length; rendererIndex++)
+                        {
+                            var renderer = meshRenderers[rendererIndex];
+                            Mesh lodMesh = GenerateStaticLOD(transform, renderer, quality, out materials, levelStatusCallback);
+                            lodMesh.name = string.Format("{0}_static{1}_{2}", gameObj.name, levelIndex, rendererIndex);
+
+                            var rendererLodObj = new GameObject(renderer.name, typeof(MeshFilter), typeof(MeshRenderer));
+                            rendererLodObj.transform.parent = staticLodParent;
+                            rendererLodObj.transform.localPosition = Vector3.zero;
+                            rendererLodObj.transform.localRotation = Quaternion.identity;
+                            rendererLodObj.transform.localScale = Vector3.one;
+                            var meshFilter = rendererLodObj.GetComponent<MeshFilter>();
+                            meshFilter.sharedMesh = lodMesh;
+                            var lodRenderer = rendererLodObj.GetComponent<MeshRenderer>();
+                            lodRenderer.sharedMaterials = materials;
+                            SetupLODRenderer(lodRenderer, level);
+                            staticLodRenderers[rendererIndex] = lodRenderer;
+                        }
+                    }
+                }
+
+                if (skinnedRenderers.Length > 0)
+                {
+                    if (level.combineMeshes)
                     {
                         Transform[] bones;
                         Material[] materials;
                         Mesh lodMesh = GenerateSkinnedLOD(transform, skinnedRenderers, quality, out materials, out bones, levelStatusCallback);
-                        lodMesh.name = string.Format("{0}_skinned{1}", gameObj.name, i);
+                        lodMesh.name = string.Format("{0}_skinned{1}", gameObj.name, levelIndex);
                         Transform rootBone = FindRootBone(transform, bones);
 
-                        GameObject staticObj = new GameObject("Skinned", typeof(SkinnedMeshRenderer));
-                        staticObj.transform.parent = lodParent;
-                        staticObj.transform.localPosition = Vector3.zero;
-                        staticObj.transform.localRotation = Quaternion.identity;
-                        staticObj.transform.localScale = Vector3.one;
-
-                        var lodRenderer = staticObj.GetComponent<SkinnedMeshRenderer>();
+                        var lodRenderer = skinnedLodObj.AddComponent<SkinnedMeshRenderer>();
                         lodRenderer.sharedMesh = lodMesh;
                         lodRenderer.sharedMaterials = materials;
                         lodRenderer.rootBone = rootBone;
                         lodRenderer.bones = bones;
                         SetupLODRenderer(lodRenderer, level);
-                        lodSkinnedRenderer = lodRenderer;
+                        skinnedLodRenderers = new Renderer[] { lodRenderer };
                     }
+                    else
+                    {
+                        skinnedLodRenderers = new Renderer[skinnedRenderers.Length];
 
-                    lodRenderers = new Renderer[] { lodMeshRenderer, lodSkinnedRenderer };
+                        Transform[] bones;
+                        Material[] materials;
+                        for (int rendererIndex = 0; rendererIndex < skinnedRenderers.Length; rendererIndex++)
+                        {
+                            var renderer = skinnedRenderers[rendererIndex];
+                            Mesh lodMesh = GenerateSkinnedLOD(transform, renderer, quality, out materials, out bones, levelStatusCallback);
+                            lodMesh.name = string.Format("{0}_skinned{1}_{2}", gameObj.name, levelIndex, rendererIndex);
+                            Transform rootBone = FindRootBone(transform, bones);
+
+                            var rendererLodObj = new GameObject(renderer.name, typeof(SkinnedMeshRenderer));
+                            rendererLodObj.transform.parent = skinnedLodParent;
+                            rendererLodObj.transform.localPosition = Vector3.zero;
+                            rendererLodObj.transform.localRotation = Quaternion.identity;
+                            rendererLodObj.transform.localScale = Vector3.one;
+                            var lodRenderer = rendererLodObj.GetComponent<SkinnedMeshRenderer>();
+                            lodRenderer.sharedMesh = lodMesh;
+                            lodRenderer.sharedMaterials = materials;
+                            lodRenderer.rootBone = rootBone;
+                            lodRenderer.bones = bones;
+                            SetupLODRenderer(lodRenderer, level);
+                            skinnedLodRenderers[rendererIndex] = lodRenderer;
+                        }
+                    }
+                }
+
+                Renderer[] lodRenderers;
+                if (staticLodRenderers != null && skinnedLodRenderers != null)
+                {
+                    lodRenderers = staticLodRenderers.Concat<Renderer>(skinnedLodRenderers).ToArray();
+                }
+                else if (staticLodRenderers != null)
+                {
+                    lodRenderers = staticLodRenderers;
+                }
+                else if (skinnedLodRenderers != null)
+                {
+                    lodRenderers = skinnedLodRenderers;
+                }
+                else
+                {
+                    lodRenderers = new Renderer[0];
                 }
 
                 minimumQuality = quality;
-                lodLevels[i + 1] = new LOD(screenRelativeTransitionHeight, lodRenderers);
+                lodLevels[levelIndex + 1] = new LOD(screenRelativeTransitionHeight, lodRenderers);
             }
 
             lodGroup.SetLODs(lodLevels);
