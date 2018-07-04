@@ -1,4 +1,11 @@
-# Changelog
+# Change Log
+
+## [v0.2.1] - 2018-07-05
+
+### Fixed
+- Heavily optimized the initialization and simplification process for the fast quadric mesh simplification algorithm.
+- Removed the maximum vertex count limit for over Unity 2017.3 in the Unity example.
+- Added support to specify if meshes should be combined when creating LOD levels in the Unity example.
 
 ## [v0.2.0] - 2018-05-12
 
@@ -27,4 +34,5 @@
 - Support for static and skinned meshes.
 - Support for 2D, 3D and 4D UVs.
 
+[v0.2.1]: https://github.com/Whinarn/MeshDecimator/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/Whinarn/MeshDecimator/compare/v0.1.0...v0.2.0

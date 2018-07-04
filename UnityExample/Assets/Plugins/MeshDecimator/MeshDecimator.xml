@@ -45,7 +45,7 @@
         <member name="P:MeshDecimator.Algorithms.FastQuadricMeshSimplification.VertexLinkDistanceSqr">
             <summary>
             Gets or sets the maximum squared distance between two vertices in order to link them.
-            Note that this value is only used if PreventHoles is true.
+            Note that this value is only used if EnableSmartLink is true.
             Default value: double.Epsilon
             </summary>
         </member>
@@ -54,7 +54,7 @@
             Creates a new fast quadric mesh simplification algorithm.
             </summary>
         </member>
-        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.Flipped(MeshDecimator.Math.Vector3d,System.Int32,System.Int32,MeshDecimator.Algorithms.FastQuadricMeshSimplification.Vertex@,MeshDecimator.Collections.ResizableArray{System.Boolean})">
+        <member name="M:MeshDecimator.Algorithms.FastQuadricMeshSimplification.Flipped(MeshDecimator.Math.Vector3d@,System.Int32,System.Int32,MeshDecimator.Algorithms.FastQuadricMeshSimplification.Vertex@,System.Boolean[])">
             <summary>
             Check if a triangle flips when this edge is removed
             </summary>
