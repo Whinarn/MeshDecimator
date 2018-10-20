@@ -892,6 +892,10 @@ namespace MeshDecimator.Algorithms
                     // Sort the border vertices by hash
                     Array.Sort(borderVertices, 0, borderIndexCount, BorderVertexComparer.instance);
 
+                    // Calculate the maximum hash distance based on the maximum vertex link distance
+                    double vertexLinkDistance = System.Math.Sqrt(vertexLinkDistanceSqr);
+                    int hashMaxDistance = System.Math.Max((int)((vertexLinkDistance / borderAreaWidth) * int.MaxValue), 1);
+
                     // Then find identical border vertices and bind them together as one
                     for (int i = 0; i < borderIndexCount; i++)
                     {
@@ -905,7 +909,7 @@ namespace MeshDecimator.Algorithms
                             int otherIndex = borderVertices[j].index;
                             if (otherIndex == -1)
                                 continue;
-                            else if ((borderVertices[j].hash - borderVertices[i].hash) > 1) // There is no point to continue beyond this point
+                            else if ((borderVertices[j].hash - borderVertices[i].hash) > hashMaxDistance) // There is no point to continue beyond this point
                                 break;
 
                             var otherPoint = vertices[otherIndex].p;
