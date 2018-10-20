@@ -2844,7 +2844,7 @@
         </member>
         <member name="P:MeshDecimator.Mesh.Indices">
             <summary>
-            Gets or sets the indices for this mesh. Once set, the sub-mesh count gets set to 1.
+            Gets or sets the combined indices for this mesh. Once set, the sub-mesh count gets set to 1.
             </summary>
         </member>
         <member name="P:MeshDecimator.Mesh.Normals">
@@ -2924,6 +2924,12 @@
             </summary>
             <param name="subMeshIndex">The sub-mesh index.</param>
             <returns>The triangle indices.</returns>
+        </member>
+        <member name="M:MeshDecimator.Mesh.GetSubMeshIndices">
+            <summary>
+            Returns the triangle indices for all sub-meshes in this mesh.
+            </summary>
+            <returns>The sub-mesh triangle indices.</returns>
         </member>
         <member name="M:MeshDecimator.Mesh.SetIndices(System.Int32,System.Int32[])">
             <summary>
