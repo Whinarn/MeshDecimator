@@ -118,7 +118,7 @@ namespace MeshDecimator
         }
 
         /// <summary>
-        /// Gets or sets the indices for this mesh. Once set, the sub-mesh count gets set to 1.
+        /// Gets or sets the combined indices for this mesh. Once set, the sub-mesh count gets set to 1.
         /// </summary>
         public int[] Indices
         {
