@@ -594,68 +594,6 @@ namespace MeshDecimatorTool
                 texCoords3D = null;
             }
 
-            /*
-            vertices = new Vector3d[faceCount];
-            for (int i = 0; i < faceCount; i++)
-            {
-                int vertexIndex = faceList[i].x;
-                vertices[i] = vertexList[vertexIndex];
-            }
-
-            if (normalList != null)
-            {
-                int normalCount = normalList.Count;
-                normals = new Vector3[faceCount];
-                for (int i = 0; i < faceCount; i++)
-                {
-                    int normalIndex = faceList[i].z;
-                    if (normalIndex >= 0 && normalIndex < normalCount)
-                    {
-                        normals[i] = normalList[normalIndex];
-                    }
-                }
-            }
-            else
-            {
-                normals = null;
-            }
-
-            if (texCoordList != null)
-            {
-                int texCoordCount = texCoordList.Count;
-                if (texCoordsAre3D)
-                {
-                    texCoords3D = new Vector3[faceCount];
-                    for (int i = 0; i < faceCount; i++)
-                    {
-                        int texCoordIndex = faceList[i].y;
-                        if (texCoordIndex >= 0 && texCoordIndex < texCoordCount)
-                        {
-                            texCoords3D[i] = texCoordList[texCoordIndex];
-                        }
-                    }
-                }
-                else
-                {
-                    texCoords2D = new Vector2[faceCount];
-                    for (int i = 0; i < faceCount; i++)
-                    {
-                        int texCoordIndex = faceList[i].y;
-                        if (texCoordIndex >= 0 && texCoordIndex < texCoordCount)
-                        {
-                            var texCoord = texCoordList[texCoordIndex];
-                            texCoords2D[i] = new Vector2(texCoord.x, texCoord.y);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                texCoords2D = null;
-                texCoords3D = null;
-            }
-            */
-
             subMeshIndices = processedIndices.ToArray();
             subMeshMaterials = subMeshMaterialList.ToArray();
             materialLibraries = materialLibraryList.ToArray();
