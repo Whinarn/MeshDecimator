@@ -118,7 +118,7 @@ namespace MeshDecimator
         }
 
         /// <summary>
-        /// Gets or sets the indices for this mesh. Once set, the sub-mesh count gets set to 1.
+        /// Gets or sets the combined indices for this mesh. Once set, the sub-mesh count gets set to 1.
         /// </summary>
         public int[] Indices
         {
@@ -497,6 +497,20 @@ namespace MeshDecimator
                 throw new IndexOutOfRangeException();
 
             return indices[subMeshIndex] ?? emptyIndices;
+        }
+
+        /// <summary>
+        /// Returns the triangle indices for all sub-meshes in this mesh.
+        /// </summary>
+        /// <returns>The sub-mesh triangle indices.</returns>
+        public int[][] GetSubMeshIndices()
+        {
+            var subMeshIndices = new int[indices.Length][];
+            for (int subMeshIndex = 0; subMeshIndex < indices.Length; subMeshIndex++)
+            {
+                subMeshIndices[subMeshIndex] = indices[subMeshIndex] ?? emptyIndices;
+            }
+            return subMeshIndices;
         }
 
         /// <summary>

@@ -64,9 +64,9 @@ namespace MeshDecimatorTool
                 var sourceNormals = sourceObjMesh.Normals;
                 var sourceTexCoords2D = sourceObjMesh.TexCoords2D;
                 var sourceTexCoords3D = sourceObjMesh.TexCoords3D;
-                var sourceIndices = sourceObjMesh.Indices;
+                var sourceSubMeshIndices = sourceObjMesh.SubMeshIndices;
 
-                var sourceMesh = new Mesh(sourceVertices, sourceIndices);
+                var sourceMesh = new Mesh(sourceVertices, sourceSubMeshIndices);
                 sourceMesh.Normals = sourceNormals;
 
                 if (sourceTexCoords2D != null)
@@ -78,7 +78,12 @@ namespace MeshDecimatorTool
                     sourceMesh.SetUVs(0, sourceTexCoords3D);
                 }
 
-                int currentTriangleCount = sourceIndices.Length / 3;
+                int currentTriangleCount = 0;
+                for (int i = 0; i < sourceSubMeshIndices.Length; i++)
+                {
+                    currentTriangleCount += (sourceSubMeshIndices[i].Length / 3);
+                }
+
                 int targetTriangleCount = (int)Math.Ceiling(currentTriangleCount * quality);
                 Console.WriteLine("Input: {0} vertices, {1} triangles (target {2})",
                     sourceVertices.Length, currentTriangleCount, targetTriangleCount);
@@ -94,7 +99,7 @@ namespace MeshDecimatorTool
 
                 var destVertices = destMesh.Vertices;
                 var destNormals = destMesh.Normals;
-                var destIndices = destMesh.Indices;
+                var destIndices = destMesh.GetSubMeshIndices();
 
                 ObjMesh destObjMesh = new ObjMesh(destVertices, destIndices);
                 destObjMesh.Normals = destNormals;
@@ -112,10 +117,16 @@ namespace MeshDecimatorTool
 
                 destObjMesh.WriteFile(destPath);
 
-                float reduction = (float)(destIndices.Length / 3) / (float)currentTriangleCount;
+                int outputTriangleCount = 0;
+                for (int i = 0; i < destIndices.Length; i++)
+                {
+                    outputTriangleCount += (destIndices[i].Length / 3);
+                }
+
+                float reduction = (float)outputTriangleCount / (float)currentTriangleCount;
                 float timeTaken = (float)stopwatch.Elapsed.TotalSeconds;
                 Console.WriteLine("Output: {0} vertices, {1} triangles ({2} reduction; {3:0.0000} sec)",
-                    destVertices.Length, destIndices.Length / 3, reduction, timeTaken);
+                    destVertices.Length, outputTriangleCount, reduction, timeTaken);
             }
             catch (Exception ex)
             {
