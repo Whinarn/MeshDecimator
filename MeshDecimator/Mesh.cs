@@ -500,6 +500,20 @@ namespace MeshDecimator
         }
 
         /// <summary>
+        /// Returns the triangle indices for all sub-meshes in this mesh.
+        /// </summary>
+        /// <returns>The sub-mesh triangle indices.</returns>
+        public int[][] GetSubMeshIndices()
+        {
+            var subMeshIndices = new int[indices.Length][];
+            for (int subMeshIndex = 0; subMeshIndex < indices.Length; subMeshIndex++)
+            {
+                subMeshIndices[subMeshIndex] = indices[subMeshIndex] ?? emptyIndices;
+            }
+            return subMeshIndices;
+        }
+
+        /// <summary>
         /// Sets the triangle indices of a specific sub-mesh in this mesh.
         /// </summary>
         /// <param name="subMeshIndex">The sub-mesh index.</param>
