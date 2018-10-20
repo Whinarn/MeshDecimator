@@ -1,5 +1,15 @@
 # Change Log
 
+## [v0.3.0] - 2018-10-20
+
+### Added
+- Added support to get an array of all sub-mesh indices on a mesh.
+
+### Fixed
+- The maximum hash distance is now calculated based on the VertexLinkDistanceSqr property value instead of being hardcoded to 1.
+- Fixed an issue with the vertex hashes not using the entire integer range, but instead was using only half of it.
+- Reworked the OBJ mesh parsing.
+
 ## [v0.2.1] - 2018-07-05
 
 ### Fixed
@@ -34,5 +44,6 @@
 - Support for static and skinned meshes.
 - Support for 2D, 3D and 4D UVs.
 
+[v0.3.0]: https://github.com/Whinarn/MeshDecimator/compare/v0.2.1...v0.3.0
 [v0.2.1]: https://github.com/Whinarn/MeshDecimator/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/Whinarn/MeshDecimator/compare/v0.1.0...v0.2.0
