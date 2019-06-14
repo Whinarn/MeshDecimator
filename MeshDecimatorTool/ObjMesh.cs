@@ -384,7 +384,7 @@ namespace MeshDecimatorTool
                             {
                                 int splitIndex = word.IndexOf('/');
                                 string word1 = word.Substring(0, splitIndex);
-                                string word2 = word.Substring(splitIndex);
+                                string word2 = word.Substring(splitIndex + 1);
                                 int.TryParse(word1, out vertexIndex);
                                 int.TryParse(word2, out texIndex);
                                 vertexIndex = ShiftIndex(vertexIndex, readVertexList.Count);

@@ -103,6 +103,8 @@ namespace MeshDecimatorTool
 
                 ObjMesh destObjMesh = new ObjMesh(destVertices, destIndices);
                 destObjMesh.Normals = destNormals;
+                destObjMesh.MaterialLibraries = sourceObjMesh.MaterialLibraries;
+                destObjMesh.SubMeshMaterials = sourceObjMesh.SubMeshMaterials;
 
                 if (sourceTexCoords2D != null)
                 {
