@@ -1,5 +1,7 @@
-# MeshDecimator
-A mesh decimation library for .NET and [Unity](https://unity3d.com/). The project is written entirely in C# and released under the MIT license.
+# MeshDecimator (Archived)
+A mesh decimation library for .NET and [Unity](https://unity.com/). The project is written entirely in C# and released under the MIT license.
+
+__WARNING:__ This repository has been archived in favor of [UnityMeshSimplifier](https://github.com/Whinarn/UnityMeshSimplifier), which includes a more updated version of this algorithm for the [Unity game engine](https://unity.com/). This means that I'm dropping the .NET support outside of Unity due to not having the time to maintain two libraries that includes almost the same code. Anyone who wishes to continue on this project is free to do so under the current [license](https://github.com/Whinarn/MeshDecimator/blob/master/LICENSE.md).
 
 ## Compatibility
 This provided Unity Example project is currently compatible with Unity 2018.1.2f1
@@ -35,6 +37,3 @@ The recommendation is to use the smart linking feature that is enabled by defaul
 
 ## Credits
 The teddy bear model in the Unity example project is from the following package from Unity Asset Store: https://assetstore.unity.com/packages/essentials/tutorial-projects/mecanim-example-scenes-5328
-
-## Other projects
-If you are interested in a more simple mesh simplification in Unity you can visit my other project [UnityMeshSimplifier](https://github.com/Whinarn/UnityMeshSimplifier).
